@@ -1,0 +1,56 @@
+     #map {
+         height: 720px;
+     }
+     /* for Mobile */
+     
+     @media only screen and (max-width: 768px) {
+         #map {
+             height: 630px;
+         }
+     }
+     
+     .custom-div-icon i.awesome {
+         font-size: 20px;
+         margin-top: 30px;
+         margin-left: 3px;
+     }
+     
+     .cap {
+         width: 300px;
+         height: 200px;
+         border-radius: 6%;
+     }
+     
+     .cap_tempietto {
+         width: 300px;
+         height: 360px;
+         border-radius: 6%;
+     }
+     
+     .cap_piccolomini {
+         width: 300px;
+         height: 320px;
+         border-radius: 6%;
+     }
+     
+     .cap_cup {
+         width: 300px;
+         height: 340px;
+         border-radius: 6%;
+     }
+     
+     .itinerario {
+         margin-left: 60%;
+     }
+     
+     a {
+         color: inherit;
+         /* blue colors for links too */
+         text-decoration: inherit;
+         /* no underline */
+     }
+     
+     a:hover {
+         color: #000000;
+         text-decoration: none;
+     }
