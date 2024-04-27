@@ -53,7 +53,7 @@ addCustomMarker(41.885905, 12.506156,
 function speakText(text) {
     window.speechSynthesis.cancel();
     var utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.8; // Riduce la velocità del 20%
+    utterance.rate = 1; // Riduce la velocità del 20%
     window.speechSynthesis.speak(utterance);
 }
 
