@@ -156,8 +156,9 @@ footer a:hover {
 
 #locate-button {
     position: absolute;
-    top: 2%;
-    right: 2%;
+    bottom: 8%;
+    right: 5%;
+    font-size: 1.7rem;
     /* Impostazione predefinita per schermi di computer */
     z-index: 1000;
     background-color: #fff;

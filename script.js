@@ -158,15 +158,14 @@ function updateLocation() {
             if (!userMarker) {
                 var blueIcon = L.divIcon({
                     className: 'awesome',
-                    html: '<i class="fas fa-map-marker-alt awesome" style="color: blue;"></i>',
-                    iconSize: [30, 30],
+                    html: '<i class="fa fa-map-pin" aria-hidden="true" style="color: blue; font-size: 3.5em;" ></i>',
+                    iconSize: [40, 30],
                     iconAnchor: [15, 30]
                 });
                 userMarker = L.marker(latlng, { icon: blueIcon }).addTo(map);
             } else {
                 userMarker.setLatLng(latlng);
             }
-            userMarker.bindTooltip('Ti trovi qui').openTooltip();
             setTimeout(function() {
                 userMarker.closePopup();
             }, 4000);
@@ -176,6 +175,7 @@ function updateLocation() {
         alert("Geolocalizzazione non supportata dal tuo browser!");
     }
 }
+
 
 window.onload = function() {
     updateLocation();
