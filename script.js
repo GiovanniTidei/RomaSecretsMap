@@ -37,7 +37,7 @@ function addMarker(lat, lng, popupText, imageUrl, imageWidth, imageHeight) {
     });
 }
 
-addMarker(41.8902, 12.4922, "<b>Il Colosseo</b><br>Il Colosseo, conosciuto anche come Anfiteatro Flavio, è un anfiteatro di epoca romana situato nel centro della città di Roma. È il più grande anfiteatro mai costruito e è considerato uno dei più grandi esempi dell'architettura e dell'ingegneria romana. Ha una lunghezza di 189 metri, una larghezza di 156 metri e un'altezza di 48 metri.", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1599px-Colosseo_2020.jpg", 200, 133);
+addMarker(41.8902, 12.4922, "<b>Il Colosseo</b><br>,conosciuto anche come Anfiteatro Flavio, è il più grande anfiteatro di epoca romana. L'anfiteatro fu edificato in epoca flavia su un'area al limite orientale del Foro Romano. La sua costruzione, iniziata da Vespasiano nel 70 dopo Cristo, fu conclusa da Tito, che lo inaugurò il 21 aprile nell'80 dopo Cristo. Situato nel centro della città di Roma, vicino al foro romano, è il più grande anfiteatro mai costruito. Ha una lunghezza di 189 metri, una larghezza di 156 metri e un'altezza di 48 metri. ", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1599px-Colosseo_2020.jpg", 200, 133);
 
 function addCustomMarker(lat, lng, popupText, imageUrl, imageWidth, imageHeight) {
     addMarker(lat, lng, popupText, imageUrl, imageWidth, imageHeight);
@@ -49,11 +49,30 @@ function addCustomMarker(lat, lng, popupText, imageUrl, imageWidth, imageHeight)
 
 addCustomMarker(41.884669, 12.521789,
     "La Chiesa dei Santi Fabiano e Venanzio è un edificio religioso di Roma, situato nel quartiere Tuscolano. Fu costruita nel 1936 dall'architetto Clemente Busiri Vici, ed eretta a parrocchia da Pio undicesimo il 10 agosto 1933. Nei locali della chiesa vi sono opere della distrutta chiesa dei Santi Venanzio e Ansovino.", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Eglise_Santi_Fabiano_e_Venanzio.JPG/2560px-Eglise_Santi_Fabiano_e_Venanzio.JPG", 200, 133);
-
+// san giovanni
 addCustomMarker(41.885905, 12.506156,
     "La Basilica di San Giovanni in Laterano, è la più antica e prestigiosa delle quattro basiliche papali di Roma, ed è stata la residenza ufficiale del Papa fino al quattordicesimo secolo. Costruita nel quarto secolo da Costantino, presenta una facciata barocca realizzata da Alessandro Galilei nel diciottesimo secolo. L'interno ospita importanti opere d'arte, tra cui il trono papale, e il baldacchino di Gian Lorenzo Bernini.",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/San_Giovanni_in_Laterano_2021.jpg/520px-San_Giovanni_in_Laterano_2021.jpg",
     200, 133);
+
+// Pantheon
+addCustomMarker(41.898609, 12.476873,
+    "Il Pantheon è uno dei monumenti più iconici di Roma. Costruito originariamente nel 27 avanti Cristo, da Agrippa, come tempio dedicato a tutti gli dei dell'Olimpo. è stato successivamente ricostruito dall'imperatore Adriano, nel 125 dopo Cristo.  È famoso per la sua cupola emisferica, che è stata un'impresa architettonica straordinaria per l'epoca, e rimane la più grande del mondo, non supportata da alcun sostegno interno. All'interno, il Pantheon ospita sepolture di personaggi illustri, tra cui il pittore Raffaello Sanzio e il re Vittorio Emanuele II. L'atmosfera solenne all'interno è arricchita dalle opere d'arte e dalle decorazioni, mentre la luce naturale che filtra attraverso l'apertura nella cupola, chiamata oculo, aggiunge un tocco mistico all'ambiente.",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Pantheon_%28Rome%29_-_Right_side_and_front.jpg/520px-Pantheon_%28Rome%29_-_Right_side_and_front.jpg",
+    200, 133);
+// Vittoriano
+addCustomMarker(41.8946, 12.4831,
+    "L'Altare della Patria, o Monumento Nazionale a Vittorio Emanuele II, è un'iconica struttura neoclassica situata a Roma. Costruito tra il 1885 e il 1911 per onorare il primo re d'Italia, Vittorio Emanuele II, è stato progettato dagli architetti Giuseppe Sacconi e Manfredo Manfredi. Lo stile architettonico è fortemente influenzato dal neoclassicismo, con colonne corinzie, statue e rilievi che celebrano l'unità italiana. Il monumento ha un'ampia valenza simbolica, rappresentando un tempio laico dedicato metaforicamente all'Italia libera e unita, e celebrando il sacrificio per la patria e i suoi ideali, in virtù della tumulazione del Milite ignoto all'interno del monumento.",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Altare_della_Patria_%28Roma%29.jpg/520px-Altare_della_Patria_%28Roma%29.jpg",
+    200, 133);
+
+//Piramide Cestia
+
+addCustomMarker(41.876389, 12.480833,
+    "La Piramide Cèstia  (o Piramide di Gaio Cestio) è una tomba romana, a forma di piramide. Costruita intorno al 12 avanti Cristo, fu commissionata da Gaio Cestio Epulone, un funzionario romano, come suo sepolcro. La piramide è un esempio unico di architettura egizia all'interno di Roma antica, riflettendo l'influenza dell'Egitto sul mondo romano, in quel periodo. Costruita in travertino e marmo, la sua forma piramidale rappresentava l'esotismo e il prestigio dell'antica civiltà egizia, mentre la sua costruzione rifletteva la moda funeraria romana dell'epoca. La Piramide Cestia rimane oggi come un'iconica testimonianza dell'interconnessione culturale nell'antichità romana. La piramide è inglobata nel perimetro del posteriore cimitero acattolico, costruito tra il diciottesimo e il diciannovesimo secolo.",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Piramide_Cestia.jpg/520px-Piramide_Cestia.jpg",
+    200, 133);
+
 
 // FINE NUOVI MARKERS
 
