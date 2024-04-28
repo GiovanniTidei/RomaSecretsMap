@@ -17,15 +17,36 @@
 
     <div id="map"></div>
 
+    <!-- locate button-->
+    <div id="locate-button" onclick="updateLocation()"> <i class="fas fa-map-marker-alt fa-lg awesome"></i></div>
+
+    <html>
+
+
+    <div id="language-selector">
+        <!-- Aggiungi le immagini delle bandiere e l'evento onclick per la bandiera inglese -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/560px-Flag_of_Italy.svg.png" width="30" height="20" id="italian-flag" class="language-flag border border-secondary rounded" onclick="updatePopupsToItalian()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/560px-Flag_of_the_United_Kingdom_%281-2%29.svg.png" width="30" height="20" id="uk-flag" class="language-flag border border-secondary rounded"
+            onclick="updatePopupsToEnglish()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Flag_of_France_%281794–1815%2C_1830–1974%29.svg/560px-Flag_of_France_%281794–1815%2C_1830–1974%29.svg.png" width="30" height="20" id="france-flag" class="language-flag border border-secondary rounded"
+            onclick="updatePopupsToFrench()">
+    </div>
+
+    <!-- Aggiungi un elemento nascosto per memorizzare il testo originale dei popup -->
+    <input type="hidden" id="original-popup-text" value="">
+
+    </html>
+
+
+
     <footer id="footer">
-        © 2024 Copyright: <a href="https://www.linkedin.com/in/giovanni-tidei/" target="_blank">Giovanni Tidei</a>
+        © 2024 Copyright: ciao come stai<a href="https://www.linkedin.com/in/giovanni-tidei/" target="_blank">Giovanni Tidei</a>
         <a href="https://www.paypal.com/donate/?hosted_button_id=L5R8GJK2L85VC" target="_blank">
             <i class="fas fa-heart" style="color: red;"></i>
             <!-- Cuore rosso -->
         </a>
     </footer>
 
-    <div id="locate-button" onclick="updateLocation()"> <i class="fas fa-map-marker-alt fa-lg awesome"></i></div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=YOUR_API_KEY"></script>

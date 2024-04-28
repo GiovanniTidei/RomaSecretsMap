@@ -16,6 +16,34 @@ html {
     left: 0;
 }
 
+
+/* Stile per le bandiere */
+
+#language-selector {
+    position: absolute;
+    z-index: 1000;
+    bottom: 7%;
+    /* Distanza dalla cima */
+    left: 20px;
+    /* Distanza dalla sinistra */
+    display: flex;
+    flex-direction: column;
+}
+
+.language-flag {
+    margin-bottom: 10px;
+    /* Distanza tra le bandiere */
+    cursor: pointer;
+    /* Cambia il cursore quando passi sopra le bandiere */
+    border: 3px solid transparent;
+    /* Nasconde il contorno nero di default */
+}
+
+.language-flag.selected {
+    border-color: black;
+    /* Mostra il contorno nero quando la bandiera è selezionata */
+}
+
 .popup-container {
     padding: 10px;
 }
