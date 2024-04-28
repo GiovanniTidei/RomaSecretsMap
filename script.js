@@ -59,6 +59,36 @@ addCustomMarker(41.885905, 12.506156,
 
 // Funzione per cambiare la lingua quando una bandiera viene cliccata
 
+async function translatePopupsToEnglish() {
+    const popups = document.querySelectorAll('.leaflet-popup-content');
+    const translations = [];
+    for (let i = 0; i < popups.length; i++) {
+        const originalText = popups[i].innerText;
+        const res = await fetch("https://libretranslate.com/translate", {
+            method: "POST",
+            body: JSON.stringify({
+                q: originalText,
+                source: "it",
+                target: "en"
+            }),
+            headers: { "Content-Type": "application/json" }
+        });
+        const translatedData = await res.json();
+        const translatedText = translatedData.translatedText;
+        translations.push(translatedText);
+    }
+    return translations;
+}
+
+async function updatePopupsToEnglish() {
+    const translatedTexts = await translatePopupsToEnglish();
+    const popups = document.querySelectorAll('.leaflet-popup-content');
+    popups.forEach(function(popup, index) {
+        popup.innerText = translatedTexts[index];
+    });
+}
+
+document.getElementById('uk-flag').addEventListener('click', updatePopupsToEnglish);
 
 
 // Funzione per audiodescrizione
