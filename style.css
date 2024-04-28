@@ -161,10 +161,11 @@ footer a:hover {
     font-size: 1.7rem;
     /* Impostazione predefinita per schermi di computer */
     z-index: 1000;
-    background-color: #fff;
+    color: blue;
+    /* background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 50%;
-    padding: 5px;
+    padding: 5px; */
     cursor: pointer;
     animation: pulse 1.5s infinite;
     /* Aggiunge animazione pulsante */
