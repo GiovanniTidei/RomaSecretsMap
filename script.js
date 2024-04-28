@@ -69,7 +69,7 @@ addCustomMarker(41.8946, 12.4831,
 //Piramide Cestia
 
 addCustomMarker(41.876389, 12.480833,
-    "La Piramide Cèstia  (o Piramide di Gaio Cestio) è una tomba romana, a forma di piramide. Costruita intorno al 12 avanti Cristo, fu commissionata da Gaio Cestio Epulone, un funzionario romano, come suo sepolcro. La piramide è un esempio unico di architettura egizia all'interno di Roma antica, riflettendo l'influenza dell'Egitto sul mondo romano, in quel periodo. Costruita in travertino e marmo, la sua forma piramidale rappresentava l'esotismo e il prestigio dell'antica civiltà egizia, mentre la sua costruzione rifletteva la moda funeraria romana dell'epoca. La Piramide Cestia rimane oggi come un'iconica testimonianza dell'interconnessione culturale nell'antichità romana. La piramide è inglobata nel perimetro del posteriore cimitero acattolico, costruito tra il diciottesimo e il diciannovesimo secolo.",
+    "La Piramide Cèstia  (o Piramide di Gaio Cestio) è una tomba romana, a forma di piramide. Costruita intorno al 12 avanti Cristo, fu commissionata da Gaio Cestio Epulone, un funzionario romano, come suo sepolcro. La piramide è un esempio unico di architettura egizia, all'interno di Roma antica, riflettendo l'influenza dell'Egitto sul mondo romano, in quel periodo. Costruita in travertino e marmo, la sua forma piramidale rappresentava l'esotismo e il prestigio dell'antica civiltà egizia, mentre la sua costruzione rifletteva la moda funeraria romana dell'epoca. La Piramide Cèstia rimane oggi come un'iconica testimonianza dell'interconnessione culturale nell'antichità romana. La piramide è inglobata nel perimetro del posteriore cimitero acattolico, costruito tra il diciottesimo e il diciannovesimo secolo.",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Piramide_Cestia.jpg/520px-Piramide_Cestia.jpg",
     200, 133);
 
@@ -115,7 +115,7 @@ document.getElementById('uk-flag').addEventListener('click', updatePopupsToEngli
 function speakText(text) {
     window.speechSynthesis.cancel();
     var utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.8; // Riduce la velocità del 20%
+    ////utterance.rate = 0.8;  /// per Riduce la velocità del 20%
     window.speechSynthesis.speak(utterance);
 }
 
