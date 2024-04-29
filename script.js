@@ -14,13 +14,21 @@ L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
 
 // Funzione per abilitare la rotazione della mappa su dispositivi mobili
 function enableMapRotationOnMobile(map) {
+    console.log('Abilitazione della rotazione della mappa su dispositivi mobili...');
     var isMobile = L.Browser.mobile || L.Browser.touch;
+    console.log('Dispositivo mobile?', isMobile);
     if (isMobile) {
+        console.log('Disabilitazione del trascinamento della mappa...');
         map.dragging.disable(); // Disabilita il trascinamento della mappa per evitare conflitti
+        console.log('Disabilitazione dello zoom con due dita...');
         map.touchZoom.disable(); // Disabilita lo zoom con due dita per evitare conflitti
+        console.log('Aggiunta del controllo di rotazione della mappa...');
         L.control.rotation({ position: 'topleft' }).addTo(map); // Abilita la rotazione della mappa
+    } else {
+        console.log('Il dispositivo non è un dispositivo mobile. La rotazione della mappa non sarà abilitata.');
     }
 }
+
 
 
 
