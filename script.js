@@ -1,5 +1,7 @@
 // Inizializzazione della mappa con la vista centrata sulla Chiesa dei Santi Fabiano e Venanzio
-var map = L.map('map').setView([41.884669, 12.521789], 17);
+var map = L.map('map', {
+    rotated: true // Abilita la rotazione della mappa
+}).setView([41.884669, 12.521789], 17);
 
 // Variabili globali
 var userMarker;
@@ -22,7 +24,7 @@ function addMarker(lat, lng, popupText, imageUrl, imageWidth, imageHeight) {
         iconAnchor: [15, 15]
     });
 
-    var marker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
+    var marker = L.marker.rotated([lat, lng], { icon: markerIcon }).addTo(map);
     if (popupText || imageUrl) {
         var popupContent = '<div>';
         if (imageUrl) {
