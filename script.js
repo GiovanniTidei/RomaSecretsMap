@@ -29,9 +29,6 @@ function enableMapRotationOnMobile(map) {
     }
 }
 
-
-
-
 // Funzione per aggiungere un marker personalizzato
 function addCustomMarker(lat, lng, popupText, imageUrl, imageWidth, imageHeight, category) {
     var icon;
