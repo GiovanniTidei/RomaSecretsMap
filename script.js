@@ -68,29 +68,53 @@ function addCustomMarker(lat, lng, popupText, imageUrl, imageWidth, imageHeight,
 }
 
 // Aggiunta di un marker 
+// // Monumenti
+// addCustomMarker(41.8946, 12.4831,
+//     "L'Altare della Patria, o Monumento Nazionale a Vittorio Emanuele II, è un'iconica struttura neoclassica situata a Roma. Costruito tra il 1885 e il 1911 per onorare il primo re d'Italia, Vittorio Emanuele II, è stato progettato dagli architetti Giuseppe Sacconi e Manfredo Manfredi. Lo stile architettonico è fortemente influenzato dal neoclassicismo, con colonne corinzie, statue e rilievi che celebrano l'unità italiana. Il monumento ha un'ampia valenza simbolica, rappresentando un tempio laico dedicato metaforicamente all'Italia libera e unita, e celebrando il sacrificio per la patria e i suoi ideali, in virtù della tumulazione del Milite ignoto all'interno del monumento.",
+//     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Altare_della_Patria_%28Roma%29.jpg/520px-Altare_della_Patria_%28Roma%29.jpg",
+//     200, 133, 'monumenti');
 // Monumenti
 addCustomMarker(41.8946, 12.4831,
-    "L'Altare della Patria, o Monumento Nazionale a Vittorio Emanuele II, è un'iconica struttura neoclassica situata a Roma. Costruito tra il 1885 e il 1911 per onorare il primo re d'Italia, Vittorio Emanuele II, è stato progettato dagli architetti Giuseppe Sacconi e Manfredo Manfredi. Lo stile architettonico è fortemente influenzato dal neoclassicismo, con colonne corinzie, statue e rilievi che celebrano l'unità italiana. Il monumento ha un'ampia valenza simbolica, rappresentando un tempio laico dedicato metaforicamente all'Italia libera e unita, e celebrando il sacrificio per la patria e i suoi ideali, in virtù della tumulazione del Milite ignoto all'interno del monumento.",
+    "Altare",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Altare_della_Patria_%28Roma%29.jpg/520px-Altare_della_Patria_%28Roma%29.jpg",
     200, 133, 'monumenti');
 
+// // Chiese
+// addCustomMarker(41.885905, 12.506156,
+//     "La Basilica di San Giovanni in Laterano, è la più antica e prestigiosa delle quattro basiliche papali di Roma, ed è stata la residenza ufficiale del Papa fino al quattordicesimo secolo. Costruita nel quarto secolo da Costantino, presenta una facciata barocca realizzata da Alessandro Galilei nel diciottesimo secolo. L'interno ospita importanti opere d'arte, tra cui il trono papale, e il baldacchino di Gian Lorenzo Bernini.",
+//     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/San_Giovanni_in_Laterano_2021.jpg/520px-San_Giovanni_in_Laterano_2021.jpg",
+//     200, 133, 'chiese');
+
 // Chiese
 addCustomMarker(41.885905, 12.506156,
-    "La Basilica di San Giovanni in Laterano, è la più antica e prestigiosa delle quattro basiliche papali di Roma, ed è stata la residenza ufficiale del Papa fino al quattordicesimo secolo. Costruita nel quarto secolo da Costantino, presenta una facciata barocca realizzata da Alessandro Galilei nel diciottesimo secolo. L'interno ospita importanti opere d'arte, tra cui il trono papale, e il baldacchino di Gian Lorenzo Bernini.",
+    "traduzione",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/San_Giovanni_in_Laterano_2021.jpg/520px-San_Giovanni_in_Laterano_2021.jpg",
     200, 133, 'chiese');
 
+// // Segreti
+// addCustomMarker(41.876389, 12.480833,
+//     "La Piramide Cestia  (o Piramide di Gaio Cestio) è una tomba romana, a forma di piramide. Costruita intorno al 12 avanti Cristo, fu commissionata da Gaio Cestio Epulone, un funzionario romano. La piramide è un esempio unico di architettura egizia all'interno della Roma antica, riflette l'influenza dell'Egitto sul mondo romano in quel periodo. Costruita in travertino e marmo, la sua forma piramidale rappresentava l'esotismo e il prestigio dell'antica civiltà egizia, mentre la sua costruzione rifletteva la moda funeraria romana dell'epoca. La Piramide Cèstia rimane oggi come un'iconica testimonianza dell'interconnessione culturale nell'antichità romana. La piramide è inglobata nel perimetro del posteriore cimitero acattolico, costruito tra il diciottesimo e il diciannovesimo secolo.",
+//     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Piramide_Cestia.jpg/520px-Piramide_Cestia.jpg",
+//     200, 133, 'segreti');
+
 // Segreti
 addCustomMarker(41.876389, 12.480833,
-    "La Piramide Cestia  (o Piramide di Gaio Cestio) è una tomba romana, a forma di piramide. Costruita intorno al 12 avanti Cristo, fu commissionata da Gaio Cestio Epulone, un funzionario romano. La piramide è un esempio unico di architettura egizia all'interno della Roma antica, riflette l'influenza dell'Egitto sul mondo romano in quel periodo. Costruita in travertino e marmo, la sua forma piramidale rappresentava l'esotismo e il prestigio dell'antica civiltà egizia, mentre la sua costruzione rifletteva la moda funeraria romana dell'epoca. La Piramide Cèstia rimane oggi come un'iconica testimonianza dell'interconnessione culturale nell'antichità romana. La piramide è inglobata nel perimetro del posteriore cimitero acattolico, costruito tra il diciottesimo e il diciannovesimo secolo.",
+    "piramide",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Piramide_Cestia.jpg/520px-Piramide_Cestia.jpg",
     200, 133, 'segreti');
 
+// // Palazzi
+// addCustomMarker(41.9038, 12.4921,
+//     "Il Palazzo Barberini è uno dei più importanti palazzi barocchi di Roma. Costruito nel 1625, ospita la Galleria Nazionale d'Arte Antica. Progettato da diversi architetti, tra cui Carlo Maderno e Francesco Borromini, il palazzo è celebre per la sua facciata e per la sala barocca con il soffitto affrescato da Pietro da Cortona. La collezione d'arte ospitata all'interno include opere di artisti come Raffaello, Tiziano, Caravaggio e molti altri.",
+//     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Le_Palais_Barberini_%28Rome%29_%285969782827%29.jpg/520px-Le_Palais_Barberini_%28Rome%29_%285969782827%29.jpg",
+//     200, 133, 'palazzi');
+
 // Palazzi
 addCustomMarker(41.9038, 12.4921,
-    "Il Palazzo Barberini è uno dei più importanti palazzi barocchi di Roma. Costruito nel 1625, ospita la Galleria Nazionale d'Arte Antica. Progettato da diversi architetti, tra cui Carlo Maderno e Francesco Borromini, il palazzo è celebre per la sua facciata e per la sala barocca con il soffitto affrescato da Pietro da Cortona. La collezione d'arte ospitata all'interno include opere di artisti come Raffaello, Tiziano, Caravaggio e molti altri.",
+    "Palazzo",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Le_Palais_Barberini_%28Rome%29_%285969782827%29.jpg/520px-Le_Palais_Barberini_%28Rome%29_%285969782827%29.jpg",
     200, 133, 'palazzi');
+
 
 // Funzione per selezionare la lingua e aggiornare il testo del pulsante
 function selectLanguageFromFlag(flagId) {
@@ -105,9 +129,9 @@ function selectLanguageFromFlag(flagId) {
         case 'france-flag':
             language = 'fr-FR'; // Francese
             break;
-        case 'spain-flag':
-            language = 'es-ES'; // Spagnolo
-            break;
+            // case 'spain-flag':
+            //     language = 'es-ES'; // Spagnolo
+            //     break;
         case 'germany-flag':
             language = 'de-DE'; // Tedesco
             break;
@@ -116,7 +140,7 @@ function selectLanguageFromFlag(flagId) {
             break;
     }
     selectLanguage(language); // Aggiorna la lingua dell'autodescrizione
-    document.getElementById('dropdownMenuButton').textContent = getLanguageName(language);
+    document.getElementById('dropdownMenuButton').textContent = getLanguageName(language); // Aggiorna il testo del pulsante delle lingue con il nome della lingua selezionata
 }
 
 // Funzione per ottenere il nome della lingua in base al codice della lingua
@@ -128,25 +152,16 @@ function getLanguageName(languageCode) {
             return 'English';
         case 'fr-FR':
             return 'Français';
-        case 'es-ES':
-            return 'Español';
+            // case 'es-ES':
+            //     return 'Español';
         case 'de-DE':
             return 'Deutsch';
-            // Aggiungi altri nomi delle lingue se necessario
         default:
-            return 'Seleziona Lingua';
+            return 'Seleziona Lingua'; // Testo predefinito se la lingua non è riconosciuta
     }
 }
 
 
-// Funzione per selezionare la lingua e la voce
-function selectLanguage(language) {
-    var voice = getVoiceForLanguage(language);
-    if (voice) {
-        defaultLanguage = language;
-        defaultVoice = voice;
-    }
-}
 
 // Funzione per ottenere la voce corrispondente alla lingua
 function getVoiceForLanguage(language) {
@@ -166,6 +181,68 @@ function speakText(text) {
 // Funzione per interrompere la sintesi vocale
 function stopSpeak() {
     window.speechSynthesis.cancel();
+}
+
+
+// Funzione per selezionare la lingua e la voce
+function selectLanguage(language) {
+    // Imposta la lingua di destinazione per la traduzione del footer
+    translateFooter(language);
+
+    // Aggiorna la lingua dell'autodescrizione
+    var voice = getVoiceForLanguage(language);
+    if (voice) {
+        defaultLanguage = language;
+        defaultVoice = voice;
+    }
+}
+
+// Funzione per selezionare la lingua e tradurre il testo del marker
+function selectLanguage(language) {
+    // Traduci il testo del marker nella lingua selezionata
+    translateMarkerText(language);
+
+    // Aggiorna la lingua dell'autodescrizione
+    var voice = getVoiceForLanguage(language);
+    if (voice) {
+        defaultLanguage = language;
+        defaultVoice = voice;
+    }
+}
+
+// Funzione per tradurre il testo del marker nella lingua selezionata
+function translateMarkerText(languageCode) {
+    // Seleziona tutti i marker sulla mappa
+    map.eachLayer(function(layer) {
+        if (layer instanceof L.Marker) {
+            var marker = layer;
+            // Ottieni il testo del popup del marker
+            var popupContent = marker.getPopup().getContent();
+
+            // Lingua di origine (italiano)
+            const translateFrom = 'it';
+            // Lingua di destinazione (lingua selezionata)
+            const translateTo = languageCode;
+
+            // Costruzione dell'URL per l'API di traduzione MyMemory
+            const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(popupContent)}&langpair=${translateFrom}|${translateTo}`;
+
+            // Effettua la richiesta di traduzione all'API di MyMemory
+            fetch(apiUrl)
+                .then((res) => res.json())
+                .then((data) => {
+                    // Aggiorna il testo del popup con la traduzione ottenuta
+                    if (data.responseData && data.responseData.translatedText) {
+                        marker.getPopup().setContent(data.responseData.translatedText);
+                    } else {
+                        console.error("Impossibile tradurre il testo del popup.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Errore durante la richiesta di traduzione:", error);
+                });
+        }
+    });
 }
 
 
