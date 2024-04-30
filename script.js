@@ -167,46 +167,11 @@ function speakText(text) {
 function stopSpeak() {
     window.speechSynthesis.cancel();
 }
-// Funzione per tradurre la descrizione dei popup
-function translatePopupDescription(popupContent, translateTo) {
-    // Ottieni il testo della descrizione
-    var description = popupContent.querySelector('#popupText').innerText;
 
-    // Imposta la lingua di origine
-    var translateFrom = 'it-IT'; // Italiano (lingua di origine)
-
-    // Costruisci l'URL per l'API di traduzione
-    var apiUrl = `https://api.mymemory.translated.net/get?q=${description}&langpair=${translateFrom}|${translateTo}`;
-
-    // Effettua la richiesta di traduzione
-    fetch(apiUrl)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
-            // Aggiorna il testo della descrizione con la traduzione ottenuta
-            if (data.responseData && data.responseData.translatedText) {
-                popupContent.querySelector('#popupText').innerText = data.responseData.translatedText;
-            }
-        })
-        .catch(function(error) {
-            console.error('Errore durante la traduzione:', error);
-        });
-}
 
 // Event listener per gestire l'interazione con i pop-up
 document.addEventListener("click", function(event) {
     var targetId = event.target && event.target.id;
-    var popupContent = event.target.closest('.leaflet-popup-content');
-
-    // Se si interagisce con un popup, traduci la descrizione
-    if (popupContent) {
-        var translateTo = event.target.getAttribute('lang'); // Ottieni il codice della lingua di destinazione dall'attributo lang
-        translatePopupDescription(popupContent, translateTo); // Traduci la descrizione usando il codice della lingua
-    }
-
-
-    // Gestione delle altre interazioni con i popup
     if (targetId === "speak") {
         var popupText = event.target.parentElement.querySelector("#popupText").innerText;
         speakText(popupText);
@@ -236,6 +201,11 @@ document.addEventListener("click", function(event) {
     }
 });
 
+// Aggiunge un event listener per interrompere l'audiodescrizione quando viene chiuso il popup
+map.on('popupclose', function(e) {
+    // Interrompe la sintesi vocale
+    stopSpeak();
+});
 
 // Funzione per aggiornare la posizione dell'utente
 function updateLocation() {
@@ -325,6 +295,8 @@ map.on('popupclose', function(e) {
         map.removeLayer(marker);
     }
 });
+
+
 
 // Event listener per aggiornare la posizione dell'utente
 // document.getElementById('updateLocationBtn').addEventListener('click', function() {
