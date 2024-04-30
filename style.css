@@ -19,30 +19,50 @@ html {
 
 /* Stile per le bandiere */
 
+
+/* Aggiorna lo stile delle bandiere */
+
+
+/* Stile per il form di Bootstrap */
+
 #language-selector {
     position: absolute;
+    top: 2%;
+    right: 3%;
     z-index: 1000;
-    bottom: 7%;
-    /* Distanza dalla cima */
-    left: 20px;
-    /* Distanza dalla sinistra */
-    display: flex;
-    flex-direction: column;
+    /* Assicura che il form sia sopra gli altri elementi */
 }
+
+
+/* Stile per le bandiere nel form */
 
 .language-flag {
-    margin-bottom: 10px;
-    /* Distanza tra le bandiere */
+    width: 30px;
+    height: 20px;
     cursor: pointer;
-    /* Cambia il cursore quando passi sopra le bandiere */
-    border: 3px solid transparent;
-    /* Nasconde il contorno nero di default */
+    border: 1px solid transparent;
 }
 
+
+/* Stile per evidenziare la bandiera selezionata */
+
 .language-flag.selected {
-    border-color: black;
-    /* Mostra il contorno nero quando la bandiera è selezionata */
+    border-color: blue;
+    /* Cambia il colore del bordo quando selezionato */
 }
+
+
+/* Stile per il dropdown menu */
+
+.dropdown-menu {
+    max-height: 200px;
+    /* Imposta l'altezza massima del menu a discesa */
+    overflow-y: auto;
+    /* Abilita lo scorrimento verticale se il contenuto è troppo lungo */
+}
+
+
+/**/
 
 .popup-container {
     padding: 10px;

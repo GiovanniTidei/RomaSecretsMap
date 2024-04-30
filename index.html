@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>maps 1.2</title>
+    <title>Roma Secret</title>
 
     <!-- Includi il CSS di leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
     <!-- Includi css bootstrap-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Includi css personalizzato-->
     <link rel="stylesheet" href="style.css">
 
@@ -30,25 +30,46 @@
 
     <html>
 
-
-    <div id="language-selector">
-        <!-- Aggiungi le immagini delle bandiere e l'evento onclick per la bandiera inglese -->
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/560px-Flag_of_Italy.svg.png" width="30" height="20" id="italian-flag" class="language-flag border border-secondary rounded" onclick="updatePopupsToItalian()">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/560px-Flag_of_the_United_Kingdom_%281-2%29.svg.png" width="30" height="20" id="uk-flag" class="language-flag border border-secondary rounded"
-            onclick="updatePopupsToEnglish()">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Flag_of_France_%281794–1815%2C_1830–1974%29.svg/560px-Flag_of_France_%281794–1815%2C_1830–1974%29.svg.png" width="30" height="20" id="france-flag" class="language-flag border border-secondary rounded"
-            onclick="updatePopupsToFrench()">
+    <div class="dropdown" id="language-selector">
+        <button class="btn btn-info dropdown-toggle btn-lg" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Italiano
+            </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li>
+                <a class="dropdown-item" href="#" onclick="selectLanguageFromFlag('italian-flag')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/560px-Flag_of_Italy.svg.png" alt="Flag of Italy" width="20" height="15"> Italiano
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#" onclick="selectLanguageFromFlag('uk-flag')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/560px-Flag_of_the_United_Kingdom_%281-2%29.svg.png" alt="Flag of UK" width="20" height="15"> English
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#" onclick="selectLanguageFromFlag('france-flag')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Flag_of_France_%281794–1815%2C_1830–1974%29.svg/560px-Flag_of_France_%281794–1815%2C_1830–1974%29.svg.png" alt="Flag of France" width="20" height="15"> Français
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#" onclick="selectLanguageFromFlag('spain-flag')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Flag_of_Spain.svg/2560px-Flag_of_Spain.svg.png" alt="Flag of Spain" width="20" height="15"> Español
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#" onclick="selectLanguageFromFlag('germany-flag')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/2560px-Flag_of_Germany.svg.png" alt="Flag of Germany" width="20" height="15"> Deutsch
+                </a>
+            </li>
+            <!-- Aggiungi altre lingue se necessario -->
+        </ul>
     </div>
 
-    <!-- Aggiungi un elemento nascosto per memorizzare il testo originale dei popup -->
-    <input type="hidden" id="original-popup-text" value="">
 
     </html>
 
 
-
     <footer id="footer">
-        © 2024 Copyright:<a href="https://www.linkedin.com/in/giovanni-tidei/" target="_blank">Giovanni Tidei</a>
+        © 2024 Copyright: ciao come stai?<a href="https://www.linkedin.com/in/giovanni-tidei/" target="_blank">Giovanni Tidei</a>
         <a href="https://www.paypal.com/donate/?hosted_button_id=L5R8GJK2L85VC" target="_blank">
             <i class="fas fa-heart" style="color: red;"></i>
             <!-- Cuore rosso -->
@@ -60,10 +81,15 @@
     <!-- Includi il JavaScript di leaflet-rotate-->
     <script src="https://cdn.jsdelivr.net/npm/leaflet-rotatedmarker@0.2.0/leaflet.rotatedMarker.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 </body>
 
 <script src="script.js"></script>
+<script src="traslate.js"></script>
 
 
 
