@@ -1,3 +1,4 @@
+//versione 1.3
 // Inizializzazione della mappa con la vista centrata sulla Chiesa dei Santi Fabiano e Venanzio
 var map = L.map('map').setView([41.884669, 12.521789], 17);
 
@@ -115,7 +116,6 @@ addCustomMarker(41.9038, 12.4921,
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Le_Palais_Barberini_%28Rome%29_%285969782827%29.jpg/520px-Le_Palais_Barberini_%28Rome%29_%285969782827%29.jpg",
     200, 133, 'palazzi');
 
-
 // Funzione per selezionare la lingua e aggiornare il testo del pulsante
 function selectLanguageFromFlag(flagId) {
     var language;
@@ -140,7 +140,7 @@ function selectLanguageFromFlag(flagId) {
             break;
     }
     selectLanguage(language); // Aggiorna la lingua dell'autodescrizione
-    document.getElementById('dropdownMenuButton').textContent = getLanguageName(language); // Aggiorna il testo del pulsante delle lingue con il nome della lingua selezionata
+    document.getElementById('dropdownMenuButton').textContent = getLanguageName(language);
 }
 
 // Funzione per ottenere il nome della lingua in base al codice della lingua
@@ -152,16 +152,25 @@ function getLanguageName(languageCode) {
             return 'English';
         case 'fr-FR':
             return 'Français';
-            // case 'es-ES':
-            //     return 'Español';
+        case 'es-ES':
+            return 'Español';
         case 'de-DE':
             return 'Deutsch';
+            // Aggiungi altri nomi delle lingue se necessario
         default:
-            return 'Seleziona Lingua'; // Testo predefinito se la lingua non è riconosciuta
+            return 'Italiano';
     }
 }
 
 
+// Funzione per selezionare la lingua e la voce
+function selectLanguage(language) {
+    var voice = getVoiceForLanguage(language);
+    if (voice) {
+        defaultLanguage = language;
+        defaultVoice = voice;
+    }
+}
 
 // Funzione per ottenere la voce corrispondente alla lingua
 function getVoiceForLanguage(language) {
@@ -182,73 +191,49 @@ function speakText(text) {
 function stopSpeak() {
     window.speechSynthesis.cancel();
 }
+// Funzione per tradurre la descrizione del popup
+function translatePopupDescription(popupContent, translateTo) {
+    // Ottieni il testo della descrizione
+    var description = popupContent.querySelector('#popupText').innerText;
 
+    // Imposta la lingua di origine
+    var translateFrom = 'it-IT'; // Italiano (lingua di origine)
 
-// Funzione per selezionare la lingua e la voce
-function selectLanguage(language) {
-    // Imposta la lingua di destinazione per la traduzione del footer
-    translateFooter(language);
+    // Costruisci l'URL per l'API di traduzione
+    var apiUrl = `https://api.mymemory.translated.net/get?q=${description}&langpair=${translateFrom}|${translateTo}`;
 
-    // Aggiorna la lingua dell'autodescrizione
-    var voice = getVoiceForLanguage(language);
-    if (voice) {
-        defaultLanguage = language;
-        defaultVoice = voice;
-    }
+    // Effettua la richiesta di traduzione
+    fetch(apiUrl)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            // Aggiorna il testo della descrizione con la traduzione ottenuta
+            if (data.responseData && data.responseData.translatedText) {
+                popupContent.querySelector('#popupText').innerText = data.responseData.translatedText;
+            }
+        })
+        .catch(function(error) {
+            console.error('Errore durante la traduzione:', error);
+        });
 }
-
-// Funzione per selezionare la lingua e tradurre il testo del marker
-function selectLanguage(language) {
-    // Traduci il testo del marker nella lingua selezionata
-    translateMarkerText(language);
-
-    // Aggiorna la lingua dell'autodescrizione
-    var voice = getVoiceForLanguage(language);
-    if (voice) {
-        defaultLanguage = language;
-        defaultVoice = voice;
-    }
-}
-
-// Funzione per tradurre il testo del marker nella lingua selezionata
-function translateMarkerText(languageCode) {
-    // Seleziona tutti i marker sulla mappa
-    map.eachLayer(function(layer) {
-        if (layer instanceof L.Marker) {
-            var marker = layer;
-            // Ottieni il testo del popup del marker
-            var popupContent = marker.getPopup().getContent();
-
-            // Lingua di origine (italiano)
-            const translateFrom = 'it';
-            // Lingua di destinazione (lingua selezionata)
-            const translateTo = languageCode;
-
-            // Costruzione dell'URL per l'API di traduzione MyMemory
-            const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(popupContent)}&langpair=${translateFrom}|${translateTo}`;
-
-            // Effettua la richiesta di traduzione all'API di MyMemory
-            fetch(apiUrl)
-                .then((res) => res.json())
-                .then((data) => {
-                    // Aggiorna il testo del popup con la traduzione ottenuta
-                    if (data.responseData && data.responseData.translatedText) {
-                        marker.getPopup().setContent(data.responseData.translatedText);
-                    } else {
-                        console.error("Impossibile tradurre il testo del popup.");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Errore durante la richiesta di traduzione:", error);
-                });
-        }
-    });
-}
-
 
 // Event listener per gestire l'interazione con i pop-up
 document.addEventListener("click", function(event) {
     var targetId = event.target && event.target.id;
+    var popupContent = event.target.closest('.leaflet-popup-content');
+
+    // Se si interagisce con un popup, traduci la descrizione
+    if (popupContent) {
+        var translateTo = event.target.getAttribute('lang'); // Ottieni il codice della lingua di destinazione dall'attributo lang
+        translatePopupDescription(popupContent, translateTo); // Traduci la descrizione usando il codice della lingua
+    }
+
+    // Gestione delle altre interazioni con i popup...
+
+
+
+    // Gestione delle altre interazioni con i popup
     if (targetId === "speak") {
         var popupText = event.target.parentElement.querySelector("#popupText").innerText;
         speakText(popupText);
@@ -278,11 +263,6 @@ document.addEventListener("click", function(event) {
     }
 });
 
-// Aggiunge un event listener per interrompere l'audiodescrizione quando viene chiuso il popup
-map.on('popupclose', function(e) {
-    // Interrompe la sintesi vocale
-    stopSpeak();
-});
 
 // Funzione per aggiornare la posizione dell'utente
 function updateLocation() {
@@ -372,8 +352,6 @@ map.on('popupclose', function(e) {
         map.removeLayer(marker);
     }
 });
-
-
 
 // Event listener per aggiornare la posizione dell'utente
 // document.getElementById('updateLocationBtn').addEventListener('click', function() {
