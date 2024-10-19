@@ -187,10 +187,8 @@
                     }).data;
                     poiData = parsedData.map(row => ({
                         name: {
-                            it: row.name_it,
-                            en: row.name_en,
-                            fr: row.name_fr,
-                            es: row.name_es
+                            it: row.name,
+
                         },
                         category: row.category,
                         lat: parseFloat(row.lat),
