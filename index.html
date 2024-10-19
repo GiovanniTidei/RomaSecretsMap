@@ -249,9 +249,9 @@
                             en: row.description_en,
                             fr: row.description_fr,
                             es: row.description_es
-
                         },
-                        img: row.img // Aggiunto il campo img
+                        img: row.img,
+                        imgsrc: row.imgsrc
 
                     }));
 
@@ -275,12 +275,11 @@
             content.innerHTML = `
                 <h3>${name}</h3>
                 
-                <!-- 
-                <a href="${poi.img}" target="_blank">
+                <a href="${poi.imgsrc}" target="_blank">
             <img src="${poi.img}" alt="${name}" style="max-width: 100%; height: auto; margin-bottom: 10px;">
         </a>
 
-    -->
+
                 <p class="description">${description}</p>
                 <button class="btn btn-primary btn-sm play-audio">▶️ Audio</button>
             `;
@@ -384,7 +383,7 @@
                     }, {
                         enableHighAccuracy: true,
                         maximumAge: 30000,
-                        timeout: 5000
+                        timeout: 27000
                     }
                 );
             } else {
