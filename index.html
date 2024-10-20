@@ -134,8 +134,10 @@
                     lng: 12.4964
                 },
                 zoom: 13,
-                zoomControl: false, // Aggiunta questa linea
-                streetViewControl: false, // Aggiunta questa linea
+                zoomControl: false, // Disabilita il controllo di zoom
+                streetViewControl: false, // Disabilita il controllo di Street View
+                tilt: 45, // Imposta un angolo di inclinazione per la rotazione
+                gestureHandling: 'greedy', // Permette spostamenti con un dito e rotazioni con due dita
                 styles: [{
                     featureType: "all",
                     elementType: "geometry",
@@ -175,6 +177,7 @@
             startLocationTracking();
             updateLanguage();
         }
+
 
         function createCustomControl() {
             const controlButton = document.createElement('button');
