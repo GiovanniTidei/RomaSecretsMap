@@ -6,266 +6,345 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mappa Interattiva di Roma</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/css/ol.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         html,
-        body,
-        #map {
+        body {
             height: 100%;
             margin: 0;
             padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
         
         #header {
-            position: fixed;
+            background-color: rgba(255, 255, 255, 0) !important;
+            height: 50px;
+            position: absolute;
             top: 0;
+            left: 0;
             width: 100%;
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #333;
-            text-align: center;
-            padding: 10px 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        #content-wrapper {
+            flex: 1;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
         }
         
-        #headerTitle {
-            font-weight: bold;
+        #map-container {
+            flex: 0 0 70%;
+            position: relative;
+            overflow: hidden;
         }
         
-        .language-selector {
-            margin-right: 20px;
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
         
-        .menu-left {
-            margin-left: 20px;
-        }
-        
-        .custom-icon {
-            width: 30px;
-            height: 30px;
+        #ad-space {
+            flex: 0 0 30%;
+            background-color: #f0f0f0;
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+        
+        .custom-icon {
             font-size: 24px;
         }
         
-        .locate-button {
+        .audio-btn,
+        .directions-btn {
+            margin-left: 10px;
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0;
+        }
+        
+        .modal-dialog {
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+            /* Assicurati che il titolo stia sopra il contenuto durante lo scorrimento */
+            background-color: white;
+            /* Mantieni lo sfondo visibile quando è fisso */
+        }
+        
+        .modal-body {
+            overflow-y: auto;
+            /* Attiva lo scroll solo sul corpo */
+        }
+        
+        .modal-content {
+            max-height: calc(90vh - 60px);
+            overflow-y: auto;
+        }
+        
+        .locate-control {
             position: absolute;
-            bottom: 25px;
+            bottom: 35px;
             right: 10px;
-            z-index: 1000;
-            background: #007bff;
-            border: none;
+        }
+        
+        .locate-control button {
+            background-color: white;
+            border: 2px solid #000;
             border-radius: 50%;
             width: 40px;
             height: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             cursor: pointer;
-            font-size: 18px;
-            color: white;
+            position: absolute;
+            bottom: 35%;
+            /* Spostato in basso a destra */
+            right: 2%;
+            z-index: 1000;
         }
         
-        .leaflet-popup {
-            z-index: 1001;
-        }
-        
-        .leaflet-popup-content-wrapper {
-            border-radius: 10px;
-            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.2);
-        }
-        
-        .leaflet-popup-content {
-            margin: 15px;
-        }
-        
-        .leaflet-popup-content h3 {
-            margin-bottom: 10px;
-            color: #333;
-        }
-        
-        .leaflet-popup-content p {
-            margin-bottom: 10px;
-            color: #666;
-        }
-        
-        .leaflet-popup-content button {
-            background-color: #4285F4;
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        .leaflet-popup-content button:hover {
-            background-color: #3367D6;
-        }
-        
-        .dropdown-item {
-            cursor: pointer;
-        }
-        
-        .flag-icon {
-            width: 20px;
-            height: 15px;
-            margin-right: 10px;
+        .locate-control button i {
+            color: #000;
+            font-size: 20px;
         }
     </style>
 </head>
 
 <body>
-    <div id="map"></div>
-    <div id="header">
-        <div class="dropdown menu-left">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+    <div id="header" class="position-fixed top-0 w-100 bg-light p-2 d-flex justify-content-between align-items-center">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                 <span id="headerTitle">Roma Interattiva</span>
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <ul class="dropdown-menu">
                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#progettoModal">Progetto</a></li>
-                <li><a class="dropdown-item" href="https://www.paypal.com" target="_blank">Sostienici <span class="heart">❤️</span></a></li>
+                <li><a class="dropdown-item" href="https://www.paypal.com/donate/?hosted_button_id=L5R8GJK2L85VC" target="_blank">Sostienici ❤️</a></li>
                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy</a></li>
             </ul>
         </div>
-        <div class="language-selector">
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                    Seleziona lingua
+        <div class="dropdown">
+            <button id="languageSelector" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <span id="languageSelectorText">🇮🇹 Italiano</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" data-lang="it">🇮🇹 Italiano</a></li>
+                <li><a class="dropdown-item" data-lang="en">🇬🇧 English</a></li>
+                <li><a class="dropdown-item" data-lang="fr">🇫🇷 Français</a></li>
+                <li><a class="dropdown-item" data-lang="es">🇪🇸 Español</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="content-wrapper">
+        <div id="map-container">
+            <div id="map"></div>
+            <div class="locate-control">
+                <button id="locateButton">
+                    <i class="fas fa-crosshairs"></i>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="languageDropdownMenuButton">
-                    <li><a class="dropdown-item" data-lang="it"><span class="flag-icon">🇮🇹</span>Italiano</a></li>
-                    <li><a class="dropdown-item" data-lang="en"><span class="flag-icon">🇬🇧</span>English</a></li>
-                    <li><a class="dropdown-item" data-lang="fr"><span class="flag-icon">🇫🇷</span>Français</a></li>
-                    <li><a class="dropdown-item" data-lang="es"><span class="flag-icon">🇪🇸</span>Español</a></li>
-                </ul>
             </div>
         </div>
+        <div id="ad-space">
+            <p>Spazio Pubblicitario</p>
+        </div>
     </div>
-    <button class="locate-button" id="locateButton">◎</button>
 
-    <!-- Modal Progetto -->
-    <div class="modal fade" id="progettoModal" tabindex="-1" aria-labelledby="progettoModalLabel" aria-hidden="true">
+    <div class="modal fade" id="progettoModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="progettoModalLabel">Progetto</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title">Progetto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Inserisci qui il testo del progetto -->
-                    <p>Questo è il testo del progetto Roma Interattiva.</p>
+                    <p id="progettoContent"></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Privacy -->
-    <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+    <div class="modal fade" id="privacyModal" tabindex="-1">
+
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="privacyModalLabel">Privacy</h5>
+                    <h5 class="modal-title">Privacy</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="privacyContent"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="poiModal" tabindex="-1" aria-labelledby="poiModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="poiModalLabel">POI Modal</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Inserisci qui il testo della privacy -->
-                    <p>Questo è il testo della privacy policy di Roma Interattiva.</p>
+                    <img id="poiModalImage" src="" alt="" class="img-fluid mb-3">
+                    <p id="poiModalDescription"></p>
+                </div>
+                <div class="modal-footer">
+                    <!-- Pulsanti aggiunti nel footer -->
+                    <button class="btn btn-sm btn-outline-secondary me-2" style="width: 40px; height: 40px; padding: 0; display: flex; justify-content: center; align-items: center;">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" style="width: 40px; height: 40px; padding: 0; display: flex; justify-content: center; align-items: center;" id="routeButton">
+                        <i class="fas fa-route"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/build/ol.js"></script>
+
     <script>
-        var map = L.map('map', {
-            zoomControl: false,
-            dragging: true,
-            tap: false
-        }).setView([41.9028, 12.4964], 13);
+        // Coordinate di Roma
+        var rome = ol.proj.fromLonLat([12.4964, 41.9028]);
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            maxZoom: 20
-        }).addTo(map);
-
-        L.control.zoom({
-            position: 'bottomleft'
-        }).addTo(map);
-
-        var currentLang = 'it';
-        var userMarker, userAccuracy;
-        var currentAudio;
-        var poiData = [];
-
-        // Icone per i POI
-        var icons = {
-            monumenti: L.divIcon({
-                className: 'custom-icon',
-                html: '🏛️',
-                iconSize: [30, 30]
+        // Creazione della mappa
+        var map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM({
+                        url: 'https://cartodb-basemaps-{a-d}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png'
+                    })
+                })
+            ],
+            view: new ol.View({
+                center: rome,
+                zoom: 13
             }),
-            chiese: L.divIcon({
-                className: 'custom-icon',
-                html: '⛪',
-                iconSize: [30, 30]
-            }),
-            edifici: L.divIcon({
-                className: 'custom-icon',
-                html: '🏰',
-                iconSize: [30, 30]
-            }),
-            varie: L.divIcon({
-                className: 'custom-icon',
-                html: '👁️',
-                iconSize: [30, 30]
+            controls: ol.control.defaults({
+                zoom: false, // Disabilita il controllo di zoom
+                attribution: true // Mantieni il controllo del copyright
             })
-        };
+        });
 
-        // Testi tradotti per i modali
-        var modalContent = {
-            progetto: {
-                it: "Questo è il testo del progetto Roma Interattiva.",
-                en: "This is the project description of Interactive Rome.",
-                fr: "Ceci est la description du projet Rome Interactive.",
-                es: "Esta es la descripción del proyecto Roma Interactiva."
-            },
-            privacy: {
-                it: "Questo è il testo della privacy policy di Roma Interattiva.",
-                en: "This is the privacy policy of Interactive Rome.",
-                fr: "Ceci est la politique de confidentialité de Rome Interactive.",
-                es: "Esta es la política de privacidad de Roma Interactiva."
+
+        var userPositionMarker;
+        var userPositionFeature;
+        var currentLang = 'it'; // Lingua predefinita
+
+        // Funzione per richiedere la geolocalizzazione
+        function requestGeolocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        var coords = ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude]);
+                        map.getView().setCenter(coords);
+                        map.getView().setZoom(16);
+                        addUserPositionMarker(coords);
+                    },
+                    function(error) {
+                        console.error('Errore nella geolocalizzazione:', error);
+                    }, {
+                        enableHighAccuracy: true
+                    }
+                );
+            } else {
+                console.error('Il browser non supporta la geolocalizzazione.');
             }
-        };
-
-        // Funzione per aggiornare i testi dei modali in base alla lingua corrente
-        function updateModalsContent() {
-            document.querySelector('#progettoModal .modal-body p').textContent = modalContent.progetto[currentLang];
-            document.querySelector('#privacyModal .modal-body p').textContent = modalContent.privacy[currentLang];
         }
 
-        function loadPOIData() {
-            const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR1s7NnwxoebCo5g_ajvJsVuDkVWxZvVX9nTZLmWC4goLzPdpdFhdoK8WW6NofzEsgVrnKugfRcUrSk/pub?output=csv';
+        // Funzione per aggiungere il marker della posizione dell'utente
+        function addUserPositionMarker(coords) {
+            if (!userPositionFeature) {
+                userPositionFeature = new ol.Feature({
+                    geometry: new ol.geom.Point(coords)
+                });
 
-            fetch(csvUrl)
-                .then(response => response.text())
-                .then(data => {
-                    const parsedData = Papa.parse(data, {
-                        header: true
-                    }).data;
-                    poiData = parsedData.map(row => ({
+                var userPositionStyle = new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: 6,
+                        fill: new ol.style.Fill({
+                            color: 'blue'
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: 'white',
+                            width: 2
+                        })
+                    })
+                });
+
+                userPositionMarker = new ol.layer.Vector({
+                    source: new ol.source.Vector({
+                        features: [userPositionFeature]
+                    }),
+                    style: userPositionStyle
+                });
+
+                map.addLayer(userPositionMarker);
+            } else {
+                userPositionFeature.getGeometry().setCoordinates(coords);
+            }
+        }
+
+        // Funzione associata al pulsante di localizzazione
+        var locateButton = document.getElementById('locateButton');
+        locateButton.addEventListener('click', function() {
+            requestGeolocation();
+        });
+
+        // Aggiorna la posizione dell'utente ogni 5 secondi
+        setInterval(function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        var coords = ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude]);
+                        addUserPositionMarker(coords);
+                    },
+                    function(error) {
+                        console.error('Errore nell\'aggiornamento della posizione:', error);
+                    }, {
+                        enableHighAccuracy: true
+                    }
+                );
+            } else {
+                console.error('Il browser non supporta la geolocalizzazione.');
+            }
+        }, 2000);
+
+        // Funzione per caricare i dati dei POI dal CSV
+        function loadPOIData() {
+            Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vR1s7NnwxoebCo5g_ajvJsVuDkVWxZvVX9nTZLmWC4goLzPdpdFhdoK8WW6NofzEsgVrnKugfRcUrSk/pub?output=csv', {
+                download: true,
+                header: true,
+                complete: result => {
+                    const poiData = result.data.map(row => ({
                         name: {
                             it: row.name,
+                            en: row.name_en,
+                            fr: row.name_fr,
+                            es: row.name_es
                         },
                         category: row.category,
                         lat: parseFloat(row.lat),
-                        lon: parseFloat(row.lon),
+                        lng: parseFloat(row.lon),
                         description: {
                             it: row.description_it,
                             en: row.description_en,
@@ -273,215 +352,128 @@
                             es: row.description_es
                         },
                         img: row.img,
-                        imgsrc: row.imgsrc
+                        imgsrc: row.imgsrc,
                     }));
-
                     poiData.forEach(createMarker);
-                })
-                .catch(error => console.error('Errore nel caricamento dei dati:', error));
+                }
+            });
         }
 
+        // Funzione per creare i marker sulla mappa
         function createMarker(poi) {
-            var marker = L.marker([poi.lat, poi.lon], {
-                icon: icons[poi.category]
-            }).addTo(map);
-            marker.bindPopup(createPopupContent(poi));
-            return marker;
+            const coords = ol.proj.fromLonLat([poi.lng, poi.lat]);
+            const marker = new ol.Feature({
+                geometry: new ol.geom.Point(coords),
+                name: poi.name,
+                description: poi.description,
+                category: poi.category,
+                lat: poi.lat,
+                lng: poi.lng
+            });
+
+            const markerStyle = new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><text x="12" y="20" font-family="Arial" font-size="20" fill="black" text-anchor="middle">${getIconForCategory(poi.category)}</text></svg>`,
+                    scale: 1
+                })
+            });
+
+            marker.setStyle(markerStyle);
+
+            const vectorSource = new ol.source.Vector({
+                features: [marker]
+            });
+
+            const vectorLayer = new ol.layer.Vector({
+                source: vectorSource
+            });
+
+            map.addLayer(vectorLayer);
+
+            // Aggiungi un event listener per il click sul marker
+            map.on('click', function(evt) {
+                map.forEachFeatureAtPixel(evt.pixel, function(feature) {
+                    if (feature === marker) {
+                        showModal(poi);
+                    }
+                });
+            });
         }
 
-        function createPopupContent(poi) {
-            var content = document.createElement('div');
-            var name = poi.name[currentLang] || poi.name.it;
-            var description = poi.description[currentLang] || poi.description.it;
-            content.innerHTML = `
-        <h3>${name}</h3>
-        
-        <a href="${poi.imgsrc}" target="_blank">
-            <img src="${poi.img}" alt="${name}" style="max-width: 100%; height: auto; margin-bottom: 10px;">
-        </a>
+        // Funzione per ottenere l'icona in base alla categoria
+        function getIconForCategory(category) {
+            return {
+                monumenti: '🏛️',
+                chiese: '✝️',
+                edifici: '🏢',
+                varie: '👁️'
+            }[category] || '';
+        }
 
-        <p class="description">${description}</p>
-        <button class="btn btn-primary btn-sm play-audio">▶️ Audio</button>
+        // Funzione per mostrare il modal con i dettagli del POI
+        function showModal(poi) {
+            const modal = document.getElementById('poiModal');
+            const modalTitle = document.getElementById('poiModalLabel');
+            const modalBody = document.getElementById('poiModalDescription');
+            const routeButton = document.getElementById('routeButton');
+
+            modalTitle.textContent = poi.name.it;
+
+            modalBody.innerHTML = `<img src="${poi.img}" alt="${poi.name.it}" class="img-fluid mb-3" onclick="window.open('${poi.imgsrc}', '_blank')">
+        <p>${poi.description.it}</p>
     `;
-            content.querySelector('.play-audio').addEventListener('click', function(e) {
-                e.stopPropagation();
-                playAudio(description);
-            });
-            return content;
-        }
-
-        function playAudio(text) {
-            stopAudio();
-            currentAudio = new SpeechSynthesisUtterance(text);
-            currentAudio.lang = currentLang === 'en' ? 'en-US' : (currentLang === 'es' ? 'es-ES' : (currentLang === 'fr' ? 'fr-FR' : 'it-IT'));
-            speechSynthesis.speak(currentAudio);
-        }
-
-        function stopAudio() {
-            if (speechSynthesis.speaking) {
-                speechSynthesis.cancel();
-            }
-        }
-
-        document.querySelectorAll('.dropdown-item[data-lang]').forEach(item => {
-            item.addEventListener('click', function(e) {
-                currentLang = this.getAttribute('data-lang');
-                document.getElementById('languageDropdownMenuButton').textContent = this.textContent;
-                updateLanguage();
-            });
-        });
-
-        function updateLanguage() {
-            map.eachLayer(function(layer) {
-                if (layer instanceof L.Marker && layer !== userMarker) {
-                    var poi = poiData.find(p => p.lat === layer.getLatLng().lat && p.lon === layer.getLatLng().lng);
-                    if (poi) {
-                        layer.setPopupContent(createPopupContent(poi));
-                    }
-                }
-            });
-            updateHeader();
-            updateModalsContent(); // Aggiorna il contenuto dei modali
-        }
-
-        function updateHeader() {
-            var headerText = {
-                it: "Roma Interattiva",
-                en: "Interactive Rome",
-                fr: "Rome Interactive",
-                es: "Roma Interactiva"
+            // Aggiungi la funzionalità al pulsante route nel footer
+            routeButton.onclick = function() {
+                openGoogleMaps(poi.lat, poi.lng);
             };
-            document.getElementById('headerTitle').textContent = headerText[currentLang] || headerText.it;
+
+            const bootstrapModal = new bootstrap.Modal(modal);
+            bootstrapModal.show();
         }
 
-        function onLocationFound(e) {
-            var radius = e.accuracy / 2;
+        // Cambio lingua pulsante
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function(event) {
+                const selectedLang = event.target.dataset.lang; // Ottieni il valore della lingua selezionata
+                const selectedText = event.target.textContent; // Ottieni il testo della lingua selezionata
 
-            if (userMarker) {
-                userMarker.setLatLng(e.latlng);
-                userAccuracy.setLatLng(e.latlng).setRadius(radius);
-            } else {
-                userMarker = L.marker(e.latlng, {
-                    icon: L.divIcon({
-                        className: 'custom-icon',
-                        html: '<div style="background-color: #4285F4; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white;"></div>',
-                        iconSize: [22, 22],
-                        iconAnchor: [11, 11]
-                    })
-                }).addTo(map);
+                // Verifica se la lingua selezionata è valida (non "Progetto" o "Privacy")
+                if (selectedLang) {
+                    // Aggiorna il pulsante con il testo della lingua selezionata
+                    document.getElementById('languageSelectorText').textContent = selectedText;
 
-                userAccuracy = L.circle(e.latlng, {
-                    radius: radius,
-                    fillColor: '#4285F4',
-                    fillOpacity: 0.2,
-                    color: '#4285F4',
-                    opacity: 0.5
-                }).addTo(map);
-            }
-        }
+                    // Cambia la lingua nel modal
+                    changeLanguage(selectedLang); // Chiama la funzione per cambiare la lingua nel modal
 
-        function onLocationError(e) {
-            alert(e.message);
-        }
-
-        map.on('locationfound', onLocationFound);
-        map.on('locationerror', onLocationError);
-
-        var watchId;
-
-        function startLocationTracking() {
-            if ("geolocation" in navigator) {
-                watchId = navigator.geolocation.watchPosition(
-                    function(position) {
-                        var e = {
-                            latlng: L.latLng(position.coords.latitude, position.coords.longitude),
-                            accuracy: position.coords.accuracy
-                        };
-                        onLocationFound(e);
-                    },
-                    function(error) {
-                        onLocationError(error);
-                    }, {
-                        enableHighAccuracy: true,
-                        maximumAge: 30000,
-                        timeout: 27000
-                    }
-                );
-            } else {
-                alert("La geolocalizzazione non è supportata dal tuo browser.");
-            }
-        }
-
-        function stopLocationTracking() {
-            if (watchId) {
-                navigator.geolocation.clearWatch(watchId);
-            }
-        }
-
-        document.getElementById('locateButton').addEventListener('click', function() {
-            map.locate({
-                setView: true,
-                maxZoom: 16
-            });
-        });
-
-        map.on('click', function() {
-            stopAudio();
-            var dropdowns = document.querySelectorAll('.dropdown-menu.show');
-            dropdowns.forEach(function(dropdown) {
-                new bootstrap.Dropdown(dropdown.previousElementSibling).hide();
-            });
-            var modals = document.querySelectorAll('.modal.show');
-            modals.forEach(function(modal) {
-                var bsModal = bootstrap.Modal.getInstance(modal);
-                if (bsModal) {
-                    bsModal.hide();
+                    // Stampa un messaggio per il debug
+                    console.log(`Lingua selezionata: ${selectedLang}`);
                 }
             });
         });
-
-        map.on('popupclose', stopAudio);
-
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', function(e) {
-                var heading;
-                if (e.webkitCompassHeading) {
-                    heading = e.webkitCompassHeading;
-                } else if (e.alpha !== null) {
-                    heading = 360 - e.alpha;
-                }
-                if (heading !== undefined && userMarker) {
-                    userMarker.setRotationAngle(heading);
-                }
-            }, false);
+        // Funzione per aprire Google Maps con le indicazioni stradali
+        function openGoogleMaps(lat, lng) {
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+            window.open(url, '_blank');
         }
 
-        // Abilita la rotazione della mappa con due dita su dispositivi touch
-        map.touchZoom.enable();
-        map.dragging.enable();
-        map.touchZoom.enable();
-        map.doubleClickZoom.enable();
-        map.scrollWheelZoom.enable();
-        map.boxZoom.enable();
-        map.keyboard.enable();
-        if (map.tap) map.tap.enable();
-
-        // Animazione del cuore pulsante
-        setInterval(function() {
-            var heart = document.querySelector('.heart');
-            if (heart) {
-                heart.style.transform = 'scale(1.2)';
-                setTimeout(function() {
-                    heart.style.transform = 'scale(1)';
-                }, 500);
-            }
-        }, 1000);
-
-        // Carica i dati dei POI e avvia il tracciamento della posizione all'avvio dell'applicazione
+        // Carica i dati dei POI al caricamento della pagina
         loadPOIData();
-        startLocationTracking();
+        // Abilita la rotazione della mappa
+        map.addInteraction(new ol.interaction.DragRotate({
+            condition: ol.events.condition.altKeyOnly
+        }));
+
+        // Aggiungi l'interazione di trascinamento per dispositivi touch
+        map.addInteraction(new ol.interaction.DragPan());
+
+        // Aggiungi l'interazione di rotazione con due dita per dispositivi touch
+        map.addInteraction(new ol.interaction.Rotate({
+            condition: ol.events.condition.touch
+        }));
+
+        // Inizializza la geolocalizzazione
+        requestGeolocation();
     </script>
 </body>
-
 
 </html>
