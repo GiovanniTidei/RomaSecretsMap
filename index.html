@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mappa Interattiva di Roma</title>
+    <title>MiraRoma</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/css/ol.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
     <style>
         html,
         body {
@@ -129,7 +130,7 @@
     <div id="header" class="position-fixed top-0 w-100 bg-light p-2 d-flex justify-content-between align-items-center">
         <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                <span id="headerTitle">Roma Interattiva</span>
+                <span id="headerTitle">Mira Roma</span>
             </button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#progettoModal">Progetto</a></li>
@@ -168,30 +169,78 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Progetto</h5>
+                    <h5 class="modal-title"><strong>MiraRoma</strong></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p id="progettoContent"></p>
+                    <p id="progettoContent">
+                        Scopri Roma come mai prima d'ora! <strong>MiraRoma</strong> è una mappa interattiva che ti guiderà tra i tesori storici e artistici della Capitale. Immagina di passeggiare tra le strade acciottolate, mentre un curatore virtuale
+                        ti racconta storie affascinanti su monumenti, statue, palazzi e fontane. Non solo avrai accesso a informazioni dettagliate su ogni punto di interesse, ma anche aneddoti divertenti e curiosità che renderanno ogni visita un’esperienza
+                        indimenticabile. Che tu sia un turista in cerca di avventure o un romano desideroso di riscoprire la propria città, <strong>MiraRoma</strong> ti accompagnerà nelle bellezze senza tempo di Roma.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="privacyModal" tabindex="-1">
 
+    <div class="modal fade" id="privacyModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Privacy</h5>
+                    <h5 class="modal-title">Privacy Policy</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p id="privacyContent"></p>
+                    <p><strong>Ultimo aggiornamento:</strong> 23/10/2024</p>
+
+                    <h6>Introduzione</h6>
+                    <p>
+                        La presente Privacy Policy descrive come raccogliamo, utilizziamo e proteggiamo i dati personali degli utenti nell'uso dell'applicazione "MiraRoma" ("l'Applicazione"). MiraRoma si impegna a rispettare la privacy degli utenti e a proteggere i loro dati
+                        personali in conformità con il Regolamento Generale sulla Protezione dei Dati (GDPR) e la normativa italiana sulla protezione dei dati personali (D.Lgs. 196/2003, "Codice della Privacy").
+                    </p>
+
+                    <h6>1. Informazioni che raccogliamo</h6>
+                    <p>
+                        MiraRoma non raccoglie, conserva o condivide dati personali degli utenti. Tuttavia, l'Applicazione può accedere temporaneamente alla posizione corrente dell'utente per fornire funzionalità specifiche, come la visualizzazione di contenuti o servizi personalizzati
+                        in base alla posizione. Questi dati di posizione non vengono conservati, condivisi o utilizzati per scopi commerciali.
+                    </p>
+
+                    <h6>2. Uso dei dati di posizione</h6>
+                    <p>
+                        I dati di posizione degli utenti vengono utilizzati esclusivamente per fornire servizi in tempo reale all'interno dell'Applicazione, come la visualizzazione della posizione corrente su una mappa o l'individuazione di punti di interesse nelle vicinanze.
+                        Questi dati vengono trattati esclusivamente localmente sul dispositivo dell'utente e non vengono trasmessi a server esterni o a terze parti.
+                    </p>
+
+                    <h6>3. Sicurezza</h6>
+                    <p>
+                        MiraRoma adotta misure tecniche e organizzative adeguate per proteggere i dati di posizione degli utenti durante il loro utilizzo temporaneo, impedendo accessi non autorizzati, perdite o usi impropri.
+                    </p>
+
+                    <h6>4. Diritti degli utenti</h6>
+                    <p>
+                        Gli utenti hanno il diritto di:
+                        <ul>
+                            <li>Disattivare la condivisione della posizione tramite le impostazioni del dispositivo.</li>
+                            <li>Richiedere ulteriori informazioni su come i loro dati di posizione vengono utilizzati all'interno dell'Applicazione.</li>
+                        </ul>
+                    </p>
+
+                    <h6>5. Modifiche alla presente Privacy Policy</h6>
+                    <p>
+                        MiraRoma si riserva il diritto di aggiornare o modificare questa Privacy Policy in qualsiasi momento. In caso di modifiche sostanziali, informeremo gli utenti tramite notifiche all'interno dell'Applicazione o attraverso il nostro sito web.
+                    </p>
+
+                    <h6>6. Contatti</h6>
+                    <p>
+                        Per qualsiasi domanda o chiarimento riguardo questa Privacy Policy, è possibile contattarci all'indirizzo email: <a href="mailto:gmt91@protonmail.com">gmt91@protonmail.com</a>.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
+
+
 
     <div class="modal fade" id="poiModal" tabindex="-1" aria-labelledby="poiModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -201,7 +250,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <img id="poiModalImage" src="" alt="" class="img-fluid mb-3">
+                    <!-- l'img viene generata nella funzione showModal -->
                     <p id="poiModalDescription"></p>
                 </div>
                 <div class="modal-footer">
@@ -223,10 +272,10 @@
 
     <script>
         // Coordinate di Roma
-        var rome = ol.proj.fromLonLat([12.4964, 41.9028]);
+        let rome = ol.proj.fromLonLat([12.4964, 41.9028]);
 
         // Creazione della mappa
-        var map = new ol.Map({
+        let map = new ol.Map({
             target: 'map',
             layers: [
                 new ol.layer.Tile({
@@ -240,15 +289,23 @@
                 zoom: 13
             }),
             controls: ol.control.defaults({
-                zoom: false, // Disabilita il controllo di zoom
-                attribution: true // Mantieni il controllo del copyright
+                zoom: false,
+                attribution: true
             })
         });
 
+        let userPositionMarker;
+        let userPositionFeature;
+        let speechSynthesis = window.speechSynthesis;
+        let speechUtterance = null;
+        let isPlaying = false;
+        let currentLang = 'it';
+        let currentLanguage = 'it';
+        let loadedPOIs = new Set(); // Per tenere traccia dei POI già caricati
 
-        var userPositionMarker;
-        var userPositionFeature;
-        var currentLang = 'it'; // Lingua predefinita
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+        }
 
         // Funzione per richiedere la geolocalizzazione
         function requestGeolocation() {
@@ -271,7 +328,6 @@
             }
         }
 
-        // Funzione per aggiungere il marker della posizione dell'utente
         function addUserPositionMarker(coords) {
             if (!userPositionFeature) {
                 userPositionFeature = new ol.Feature({
@@ -280,13 +336,13 @@
 
                 var userPositionStyle = new ol.style.Style({
                     image: new ol.style.Circle({
-                        radius: 6,
+                        radius: 8,
                         fill: new ol.style.Fill({
                             color: 'blue'
                         }),
                         stroke: new ol.style.Stroke({
                             color: 'white',
-                            width: 2
+                            width: 4
                         })
                     })
                 });
@@ -304,13 +360,11 @@
             }
         }
 
-        // Funzione associata al pulsante di localizzazione
         var locateButton = document.getElementById('locateButton');
         locateButton.addEventListener('click', function() {
             requestGeolocation();
         });
 
-        // Aggiorna la posizione dell'utente ogni 5 secondi
         setInterval(function() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -324,42 +378,58 @@
                         enableHighAccuracy: true
                     }
                 );
-            } else {
-                console.error('Il browser non supporta la geolocalizzazione.');
             }
         }, 2000);
 
-        // Funzione per caricare i dati dei POI dal CSV
+        // Funzione modificata per caricare i POI in base alla viewport
         function loadPOIData() {
-            Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vR1s7NnwxoebCo5g_ajvJsVuDkVWxZvVX9nTZLmWC4goLzPdpdFhdoK8WW6NofzEsgVrnKugfRcUrSk/pub?output=csv', {
-                download: true,
-                header: true,
-                complete: result => {
-                    const poiData = result.data.map(row => ({
-                        name: {
-                            it: row.name,
-                            en: row.name_en,
-                            fr: row.name_fr,
-                            es: row.name_es
-                        },
-                        category: row.category,
-                        lat: parseFloat(row.lat),
-                        lng: parseFloat(row.lon),
-                        description: {
-                            it: row.description_it,
-                            en: row.description_en,
-                            fr: row.description_fr,
-                            es: row.description_es
-                        },
-                        img: row.img,
-                        imgsrc: row.imgsrc,
-                    }));
-                    poiData.forEach(createMarker);
-                }
-            });
+            const jsonUrl = 'punti_interesse.json';
+            const currentExtent = map.getView().calculateExtent(map.getSize());
+            const bufferedExtent = ol.extent.buffer(currentExtent, ol.extent.getWidth(currentExtent) * 0.1);
+
+            fetch(jsonUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Errore nel caricamento del file JSON: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    data.forEach(item => {
+                        const coords = ol.proj.fromLonLat([parseFloat(item.lon), parseFloat(item.lat)]);
+                        const poiId = `${item.lat}-${item.lon}`; // Identificatore unico per ogni POI
+
+                        // Verifica se il POI è nella viewport e non è già stato caricato
+                        if (ol.extent.containsCoordinate(bufferedExtent, coords) && !loadedPOIs.has(poiId)) {
+                            const poi = {
+                                name: {
+                                    it: item.name,
+                                    en: item.name_en,
+                                    fr: item.name_fr,
+                                    es: item.name_es
+                                },
+                                category: item.category,
+                                lat: parseFloat(item.lat),
+                                lng: parseFloat(item.lon),
+                                description: {
+                                    it: item.description_it,
+                                    en: item.description_en,
+                                    fr: item.description_fr,
+                                    es: item.description_es
+                                },
+                                img: item.img,
+                                imgsrc: item.imgsrc,
+                            };
+                            createMarker(poi);
+                            loadedPOIs.add(poiId); // Aggiungi il POI alla lista dei caricati
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Errore nel caricamento dei dati JSON:', error);
+                });
         }
 
-        // Funzione per creare i marker sulla mappa
         function createMarker(poi) {
             const coords = ol.proj.fromLonLat([poi.lng, poi.lat]);
             const marker = new ol.Feature({
@@ -390,7 +460,6 @@
 
             map.addLayer(vectorLayer);
 
-            // Aggiungi un event listener per il click sul marker
             map.on('click', function(evt) {
                 map.forEachFeatureAtPixel(evt.pixel, function(feature) {
                     if (feature === marker) {
@@ -399,8 +468,7 @@
                 });
             });
         }
-
-        // Funzione per ottenere l'icona in base alla categoria
+        //associa emoj ai marker in base a categoria
         function getIconForCategory(category) {
             return {
                 monumenti: '🏛️',
@@ -410,54 +478,207 @@
             }[category] || '';
         }
 
-        // Funzione per mostrare il modal con i dettagli del POI
+        //creazione del modal con poi e aggiornamento della lingua della description
         function showModal(poi) {
             const modal = document.getElementById('poiModal');
             const modalTitle = document.getElementById('poiModalLabel');
             const modalBody = document.getElementById('poiModalDescription');
             const routeButton = document.getElementById('routeButton');
 
-            modalTitle.textContent = poi.name.it;
+            // Resetta qualsiasi sintesi vocale in corso
+            if (speechUtterance) {
+                speechSynthesis.cancel();
+                isPlaying = false;
+            }
 
-            modalBody.innerHTML = `<img src="${poi.img}" alt="${poi.name.it}" class="img-fluid mb-3" onclick="window.open('${poi.imgsrc}', '_blank')">
-        <p>${poi.description.it}</p>
-    `;
-            // Aggiungi la funzionalità al pulsante route nel footer
+            // Imposta il titolo e la descrizione nella lingua corrente
+            modalTitle.textContent = poi.name[currentLanguage] || poi.name.it;
+            modalBody.innerHTML = '';
+
+            // Crea e aggiungi l'elemento immagine
+            const imgElement = document.createElement('img');
+            imgElement.src = poi.img;
+            imgElement.alt = poi.name[currentLanguage] || poi.name.it;
+            imgElement.classList.add('img-fluid');
+
+            modalBody.appendChild(imgElement);
+
+            // Aggiungi il div per imgsrc
+            const imgSrcDiv = document.createElement('div');
+            imgSrcDiv.innerHTML = poi.imgsrc;
+            imgSrcDiv.style.fontSize = '0.5em'; // Imposta la dimensione del font a piccola
+            imgSrcDiv.style.marginTop = '1em'; // Rimuove il margine superiore per attaccarlo all'immagine
+            imgSrcDiv.style.marginBottom = '0.1em'; // Aggiunge un leggero margine inferiore
+            // Aggiungi CSS per evitare lo scorrimento orizzontale e far andare a capo
+            imgSrcDiv.style.wordWrap = 'break-word'; // Forza la rottura delle parole lunghe
+            imgSrcDiv.style.overflowWrap = 'break-word'; // Gestisce l'overflow del testo lungo
+            imgSrcDiv.style.maxWidth = '100%'; // Assicura che il contenuto rimanga all'interno della larghezza del modal
+            modalBody.appendChild(imgSrcDiv);
+
+            // Aggiungi separatore
+            const separator = document.createElement('hr');
+            modalBody.appendChild(separator);
+
+            // Aggiungi la descrizione nella lingua corrente
+            const descriptionParagraph = document.createElement('p');
+            descriptionParagraph.textContent = poi.description[currentLanguage] || poi.description.it;
+            modalBody.appendChild(descriptionParagraph);
+
+            // Configura il pulsante audio
+            const audioBtn = document.querySelector('#poiModal .modal-footer .btn-outline-secondary');
+            audioBtn.innerHTML = '<i class="fas fa-play"></i>';
+
+            // Gestione del pulsante audio
+            audioBtn.onclick = function() {
+                if (!isPlaying) {
+                    // Crea una nuova utterance nella lingua corrente
+                    speechUtterance = new SpeechSynthesisUtterance(poi.description[currentLanguage] || poi.description.it);
+
+                    // Mappa delle lingue per la sintesi vocale
+                    const langMap = {
+                        'it': 'it-IT',
+                        'en': 'en-GB',
+                        'fr': 'fr-FR',
+                        'es': 'es-ES'
+                    };
+
+                    speechUtterance.lang = langMap[currentLanguage];
+
+                    // Gestione dell'evento di fine riproduzione
+                    speechUtterance.onend = function() {
+                        audioBtn.innerHTML = '<i class="fas fa-play"></i>';
+                        isPlaying = false;
+                    };
+
+                    // Avvia la riproduzione
+                    speechSynthesis.speak(speechUtterance);
+                    audioBtn.innerHTML = '<i class="fas fa-stop"></i>';
+                    isPlaying = true;
+                } else {
+                    // Ferma la riproduzione
+                    speechSynthesis.cancel();
+                    audioBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    isPlaying = false;
+                }
+            };
+
+            // Configura il pulsante delle direzioni
             routeButton.onclick = function() {
                 openGoogleMaps(poi.lat, poi.lng);
             };
 
+            // Gestione della chiusura del modal
+            modal.addEventListener('hidden.bs.modal', function() {
+                if (speechUtterance) {
+                    speechSynthesis.cancel();
+                    audioBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    isPlaying = false;
+                }
+            });
+
+            // Mostra il modal
             const bootstrapModal = new bootstrap.Modal(modal);
             bootstrapModal.show();
         }
 
-        // Cambio lingua pulsante
-        document.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', function(event) {
-                const selectedLang = event.target.dataset.lang; // Ottieni il valore della lingua selezionata
-                const selectedText = event.target.textContent; // Ottieni il testo della lingua selezionata
+        // Definisci le traduzioni per ogni lingua
+        const translations = {
+            it: {
+                title: "MiraRoma",
+                content: `
+            Scopri Roma come mai prima d'ora! <strong>MiraRoma</strong> è una mappa interattiva che ti guiderà tra i tesori storici e artistici della Capitale.
+            Immagina di passeggiare tra le strade acciottolate, mentre un curatore virtuale ti racconta storie affascinanti su monumenti, statue, palazzi e fontane.
+            Non solo avrai accesso a informazioni dettagliate su ogni punto di interesse, ma anche aneddoti divertenti e curiosità che renderanno ogni visita un’esperienza indimenticabile.
+            Che tu sia un turista in cerca di avventure o un romano desideroso di riscoprire la propria città, <strong>MiraRoma</strong> ti accompagnerà nelle bellezze senza tempo di Roma.
+        `
+            },
+            en: {
+                title: "MiraRoma",
+                content: `
+            Discover Rome like never before! <strong>MiraRoma</strong> is an interactive map that will guide you through the historical and artistic treasures of the Eternal City.
+            Imagine strolling through the cobblestone streets while a virtual curator shares fascinating stories about monuments, statues, palaces, and fountains.
+            Not only will you have access to detailed information about each point of interest, but also fun anecdotes and curiosities that will make each visit unforgettable.
+            Whether you're a tourist looking for adventures or a Roman wanting to rediscover your city, <strong>MiraRoma</strong> will accompany you through the timeless beauty of Rome.
+        `
+            },
+            fr: {
+                title: "MiraRoma",
+                content: `
+            Découvrez Rome comme jamais auparavant ! <strong>MiraRoma</strong> est une carte interactive qui vous guidera à travers les trésors historiques et artistiques de la Capitale.
+            Imaginez-vous déambulant dans les rues pavées pendant qu’un curateur virtuel vous raconte des histoires fascinantes sur les monuments, statues, palais et fontaines.
+            Non seulement vous aurez accès à des informations détaillées sur chaque point d’intérêt, mais aussi à des anecdotes amusantes et des curiosités qui rendront chaque visite inoubliable.
+            Que vous soyez un touriste en quête d’aventures ou un Romain désireux de redécouvrir votre ville, <strong>MiraRoma</strong> vous accompagnera à travers la beauté intemporelle de Rome.
+        `
+            }
+        };
 
-                // Verifica se la lingua selezionata è valida (non "Progetto" o "Privacy")
+        // Funzione per cambiare la lingua
+        function changeLanguage(lang) {
+            currentLanguage = lang; // Aggiorna la lingua corrente
+
+            // Aggiorna il modal del progetto
+            const projectTranslation = translations[lang];
+            if (projectTranslation) {
+                document.querySelector('#progettoModal .modal-title').innerHTML = projectTranslation.title;
+                document.getElementById('progettoContent').innerHTML = projectTranslation.content;
+            }
+
+            // Se c'è un modal aperto per i POI, aggiorna il contenuto
+            const poiModal = document.getElementById('poiModal');
+            if (poiModal.classList.contains('show')) {
+                const currentPoiTitle = document.getElementById('poiModalLabel').textContent;
+                const currentPoi = findPoiByTitle(currentPoiTitle); // Dovrai implementare questa funzione
+
+                if (currentPoi) {
+                    // Aggiorna il contenuto del modal nella nuova lingua
+                    document.getElementById('poiModalLabel').textContent = currentPoi.name[currentLanguage] || currentPoi.name.it;
+                    document.getElementById('poiModalDescription').textContent =
+                        currentPoi.description[currentLanguage] || currentPoi.description.it;
+
+                    // Se c'è una riproduzione audio in corso, fermala
+                    if (speechUtterance && isPlaying) {
+                        speechSynthesis.cancel();
+                        document.querySelector('#poiModal .modal-footer .btn-outline-secondary').innerHTML =
+                            '<i class="fas fa-play"></i>';
+                        isPlaying = false;
+                    }
+                }
+            }
+        }
+
+        // Gestione del selettore lingua nel menu
+        document.querySelectorAll('.dropdown-item[data-lang]').forEach(item => {
+            item.addEventListener('click', function(event) {
+                const selectedLang = this.dataset.lang; // Lingua selezionata (it, en, fr, ecc.)
+                const selectedText = this.textContent; // Testo del pulsante selezionato (Italiano, English, Français, ecc.)
+
                 if (selectedLang) {
-                    // Aggiorna il pulsante con il testo della lingua selezionata
+                    // Aggiorna il testo del selettore visibile
                     document.getElementById('languageSelectorText').textContent = selectedText;
 
-                    // Cambia la lingua nel modal
-                    changeLanguage(selectedLang); // Chiama la funzione per cambiare la lingua nel modal
-
-                    // Stampa un messaggio per il debug
-                    console.log(`Lingua selezionata: ${selectedLang}`);
+                    // Cambia la lingua e aggiorna il contenuto del modal
+                    changeLanguage(selectedLang);
                 }
             });
         });
-        // Funzione per aprire Google Maps con le indicazioni stradali
+
+        // Imposta il contenuto iniziale in italiano
+        changeLanguage('it'); // Quando la pagina viene caricata, il contenuto sarà in italiano
+
+
         function openGoogleMaps(lat, lng) {
             const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
             window.open(url, '_blank');
         }
 
-        // Carica i dati dei POI al caricamento della pagina
+        // Aggiungi listener per il movimento della mappa
+        map.on('moveend', function() {
+            loadPOIData();
+        });
+
+        // Inizializza la mappa caricando i POI iniziali
         loadPOIData();
+
         // Abilita la rotazione della mappa
         map.addInteraction(new ol.interaction.DragRotate({
             condition: ol.events.condition.altKeyOnly
