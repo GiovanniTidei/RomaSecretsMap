@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MiraRoma</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/css/ol.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
@@ -38,7 +38,7 @@
         }
         
         #map-container {
-            flex: 0 0 70%;
+            flex: 0 0 100%;
             position: relative;
             overflow: hidden;
         }
@@ -50,14 +50,14 @@
             width: 100%;
             height: 100%;
         }
-        
+        /*   pER SPAZIO PUBBLICITARIO, ridurre map-container a 70%      
         #ad-space {
             flex: 0 0 30%;
             background-color: #f0f0f0;
             display: flex;
             justify-content: center;
             align-items: center;
-        }
+        } */
         
         .custom-icon {
             font-size: 24px;
@@ -147,6 +147,7 @@
                 <li><a class="dropdown-item" data-lang="en">🇬🇧 English</a></li>
                 <li><a class="dropdown-item" data-lang="fr">🇫🇷 Français</a></li>
                 <li><a class="dropdown-item" data-lang="es">🇪🇸 Español</a></li>
+                <!-- <li><a class="dropdown-item" data-lang="lat">🇪Latino</a></li> -->
             </ul>
         </div>
     </div>
@@ -160,11 +161,12 @@
                 </button>
             </div>
         </div>
+        <!-- pubblicità -->
         <div id="ad-space">
-            <p>Spazio Pubblicitario</p>
+            <p></p>
         </div>
     </div>
-
+    <!-- bottone destro Miraroma oscurato -->
     <div class="modal fade" id="progettoModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -174,15 +176,11 @@
                 </div>
                 <div class="modal-body">
                     <p id="progettoContent">
-                        Scopri Roma come mai prima d'ora! <strong>MiraRoma</strong> è una mappa interattiva che ti guiderà tra i tesori storici e artistici della Capitale. Immagina di passeggiare tra le strade acciottolate, mentre un curatore virtuale
-                        ti racconta storie affascinanti su monumenti, statue, palazzi e fontane. Non solo avrai accesso a informazioni dettagliate su ogni punto di interesse, ma anche aneddoti divertenti e curiosità che renderanno ogni visita un’esperienza
-                        indimenticabile. Che tu sia un turista in cerca di avventure o un romano desideroso di riscoprire la propria città, <strong>MiraRoma</strong> ti accompagnerà nelle bellezze senza tempo di Roma.
                     </p>
                 </div>
             </div>
         </div>
     </div>
-
 
     <div class="modal fade" id="privacyModal" tabindex="-1">
         <div class="modal-dialog">
@@ -240,8 +238,6 @@
         </div>
     </div>
 
-
-
     <div class="modal fade" id="poiModal" tabindex="-1" aria-labelledby="poiModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -253,18 +249,23 @@
                     <!-- l'img viene generata nella funzione showModal -->
                     <p id="poiModalDescription"></p>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer d-flex justify-content-start">
                     <!-- Pulsanti aggiunti nel footer -->
-                    <button class="btn btn-sm btn-outline-secondary me-2" style="width: 40px; height: 40px; padding: 0; display: flex; justify-content: center; align-items: center;">
+                    <button class="btn btn-lg btn-outline-secondary me-2" style="width: 40px; height: 40px; padding: 0; display: flex; justify-content: center; align-items: center;">
                         <i class="fas fa-play"></i>
                     </button>
-                    <button class="btn btn-sm btn-outline-primary" style="width: 40px; height: 40px; padding: 0; display: flex; justify-content: center; align-items: center;" id="routeButton">
+                    <button class="btn btn-lg btn-outline-primary" style="width: 40px; height: 40px; padding: 0; display: flex; justify-content: center; align-items: center;" id="routeButton">
                         <i class="fas fa-route"></i>
                     </button>
                 </div>
             </div>
         </div>
     </div>
+    <footer id="sticky-footer" class="py-4 bg-dark text-white-50">
+        <div class="container text-center">
+            <p>© 2024 Copyright: <a href="" class="text-decoration-none text-white">Giovanni Tidei</a> </p>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
@@ -272,8 +273,7 @@
 
     <script>
         // Coordinate di Roma
-        let rome = ol.proj.fromLonLat([12.4964, 41.9028]);
-
+        let rome = ol.proj.fromLonLat([12.474601, 41.897344]);
         // Creazione della mappa
         let map = new ol.Map({
             target: 'map',
@@ -286,7 +286,7 @@
             ],
             view: new ol.View({
                 center: rome,
-                zoom: 13
+                zoom: 14
             }),
             controls: ol.control.defaults({
                 zoom: false,
@@ -302,10 +302,10 @@
         let currentLang = 'it';
         let currentLanguage = 'it';
         let loadedPOIs = new Set(); // Per tenere traccia dei POI già caricati
-
-        function changeLanguage(lang) {
-            currentLanguage = lang;
-        }
+        //nn serve
+        // function changeLanguage(lang) {
+        //     currentLanguage = lang;
+        // }
 
         // Funzione per richiedere la geolocalizzazione
         function requestGeolocation() {
@@ -415,7 +415,8 @@
                                     it: item.description_it,
                                     en: item.description_en,
                                     fr: item.description_fr,
-                                    es: item.description_es
+                                    es: item.description_es,
+                                    lat: item.description_lat
                                 },
                                 img: item.img,
                                 imgsrc: item.imgsrc,
@@ -444,7 +445,7 @@
             const markerStyle = new ol.style.Style({
                 image: new ol.style.Icon({
                     src: `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><text x="12" y="20" font-family="Arial" font-size="20" fill="black" text-anchor="middle">${getIconForCategory(poi.category)}</text></svg>`,
-                    scale: 1
+                    scale: 1.8
                 })
             });
 
@@ -474,7 +475,9 @@
                 monumenti: '🏛️',
                 chiese: '✝️',
                 edifici: '🏢',
-                varie: '👁️'
+                varie: '👁️',
+                fontane: '⛲',
+                statue: '🗿',
             }[category] || '';
         }
 
@@ -484,109 +487,159 @@
             const modalTitle = document.getElementById('poiModalLabel');
             const modalBody = document.getElementById('poiModalDescription');
             const routeButton = document.getElementById('routeButton');
+            let animationInterval;
+            let originalContent;
+            let isPaused = false; // Variabile per lo stato di pausa
 
             // Resetta qualsiasi sintesi vocale in corso
             if (speechUtterance) {
                 speechSynthesis.cancel();
                 isPlaying = false;
+                clearInterval(animationInterval);
             }
 
-            // Imposta il titolo e la descrizione nella lingua corrente
+            // Funzione per creare l'animazione delle emoji
+            function createSpeakingAnimation() {
+                const emojis = ['😀', '😮', '😐', '😯', '😑', '😯', '🙂', '😀', '🙂', '😮', '😐', '😀', '😮'];
+
+                let currentIndex = 0;
+
+                // Trova il footer del modal
+                const modalFooter = document.querySelector('#poiModal .modal-footer');
+
+                // Crea il contenitore delle emoji e aggiungilo al footer
+                const emojiContainer = document.createElement('p');
+                emojiContainer.style.fontSize = '38px';
+
+                // Allinea a destra usando Bootstrap
+                emojiContainer.style.display = 'inline-block'; // Imposta come inline-block per un corretto allineamento
+                emojiContainer.style.marginLeft = 'auto'; // Spazio automatico a sinistra per spostare a destra
+                modalFooter.appendChild(emojiContainer);
+
+                return {
+                    start: () => {
+                        if (!document.body.contains(emojiContainer)) {
+                            modalFooter.appendChild(emojiContainer);
+                        }
+                        emojiContainer.style.display = 'inline-block'; // Mostra le emoji
+                        animationInterval = setInterval(() => {
+                            emojiContainer.textContent = emojis[currentIndex];
+                            currentIndex = (currentIndex + 1) % emojis.length;
+                        }, 220);
+                    },
+                    stop: () => {
+                        clearInterval(animationInterval);
+                        emojiContainer.style.display = 'none'; // Nasconde le emoji
+                    }
+                };
+            }
+
             modalTitle.textContent = poi.name[currentLanguage] || poi.name.it;
             modalBody.innerHTML = '';
 
-            // Crea e aggiungi l'elemento immagine
             const imgElement = document.createElement('img');
             imgElement.src = poi.img;
             imgElement.alt = poi.name[currentLanguage] || poi.name.it;
             imgElement.classList.add('img-fluid');
-
             modalBody.appendChild(imgElement);
 
-            // Aggiungi il div per imgsrc
             const imgSrcDiv = document.createElement('div');
             imgSrcDiv.innerHTML = poi.imgsrc;
-            imgSrcDiv.style.fontSize = '0.5em'; // Imposta la dimensione del font a piccola
-            imgSrcDiv.style.marginTop = '1em'; // Rimuove il margine superiore per attaccarlo all'immagine
-            imgSrcDiv.style.marginBottom = '0.1em'; // Aggiunge un leggero margine inferiore
-            // Aggiungi CSS per evitare lo scorrimento orizzontale e far andare a capo
-            imgSrcDiv.style.wordWrap = 'break-word'; // Forza la rottura delle parole lunghe
-            imgSrcDiv.style.overflowWrap = 'break-word'; // Gestisce l'overflow del testo lungo
-            imgSrcDiv.style.maxWidth = '100%'; // Assicura che il contenuto rimanga all'interno della larghezza del modal
+            imgSrcDiv.style.fontSize = '0.5em';
+            imgSrcDiv.style.marginTop = '1em';
+            imgSrcDiv.style.marginBottom = '0.1em';
+            imgSrcDiv.style.wordWrap = 'break-word';
+            imgSrcDiv.style.overflowWrap = 'break-word';
+            imgSrcDiv.style.maxWidth = '100%';
             modalBody.appendChild(imgSrcDiv);
 
-            // Aggiungi separatore
             const separator = document.createElement('hr');
             modalBody.appendChild(separator);
 
-            // Aggiungi la descrizione nella lingua corrente
             const descriptionParagraph = document.createElement('p');
             descriptionParagraph.textContent = poi.description[currentLanguage] || poi.description.it;
             modalBody.appendChild(descriptionParagraph);
 
+            const speakingAnimation = createSpeakingAnimation();
+
             // Configura il pulsante audio
             const audioBtn = document.querySelector('#poiModal .modal-footer .btn-outline-secondary');
+
             audioBtn.innerHTML = '<i class="fas fa-play"></i>';
 
             // Gestione del pulsante audio
             audioBtn.onclick = function() {
                 if (!isPlaying) {
-                    // Crea una nuova utterance nella lingua corrente
-                    speechUtterance = new SpeechSynthesisUtterance(poi.description[currentLanguage] || poi.description.it);
+                    if (!isPaused) {
+                        // Crea una nuova utterance solo se non è in pausa
+                        speechUtterance = new SpeechSynthesisUtterance(poi.description[currentLanguage] || poi.description.it);
 
-                    // Mappa delle lingue per la sintesi vocale
-                    const langMap = {
-                        'it': 'it-IT',
-                        'en': 'en-GB',
-                        'fr': 'fr-FR',
-                        'es': 'es-ES'
-                    };
+                        const langMap = {
+                            'it': 'it-IT',
+                            'en': 'en-GB',
+                            'fr': 'fr-FR',
+                            'es': 'es-ES',
+                            'lat': 'it'
+                        };
 
-                    speechUtterance.lang = langMap[currentLanguage];
+                        speechUtterance.lang = langMap[currentLanguage];
 
-                    // Gestione dell'evento di fine riproduzione
-                    speechUtterance.onend = function() {
-                        audioBtn.innerHTML = '<i class="fas fa-play"></i>';
-                        isPlaying = false;
-                    };
+                        speechUtterance.onend = function() {
+                            audioBtn.innerHTML = '<i class="fas fa-play"></i>';
+                            isPlaying = false;
+                            isPaused = false;
+                            speakingAnimation.stop();
+                        };
 
-                    // Avvia la riproduzione
-                    speechSynthesis.speak(speechUtterance);
-                    audioBtn.innerHTML = '<i class="fas fa-stop"></i>';
-                    isPlaying = true;
+                        speakingAnimation.start();
+                        speechSynthesis.speak(speechUtterance);
+                        audioBtn.innerHTML = '<i class="fas fa-stop"></i>';
+                        isPlaying = true;
+                        isPaused = false;
+                    } else {
+                        // Riprendi se è in pausa
+                        speechSynthesis.resume();
+                        speakingAnimation.start(); // Riavvia l'animazione delle emoji
+                        audioBtn.innerHTML = '<i class="fas fa-stop"></i>';
+                        isPlaying = true;
+                        isPaused = false;
+                    }
                 } else {
-                    // Ferma la riproduzione
-                    speechSynthesis.cancel();
+                    // Metti in pausa se è in riproduzione
+                    speechSynthesis.pause();
+                    speakingAnimation.stop(); // Ferma l'animazione delle emoji
                     audioBtn.innerHTML = '<i class="fas fa-play"></i>';
                     isPlaying = false;
+                    isPaused = true;
                 }
             };
 
-            // Configura il pulsante delle direzioni
             routeButton.onclick = function() {
                 openGoogleMaps(poi.lat, poi.lng);
             };
+            routeButton.style.padding = '10px 20px'; // Aumenta dimensione del contenitore del pulsante
 
-            // Gestione della chiusura del modal
             modal.addEventListener('hidden.bs.modal', function() {
                 if (speechUtterance) {
                     speechSynthesis.cancel();
                     audioBtn.innerHTML = '<i class="fas fa-play"></i>';
                     isPlaying = false;
+                    isPaused = false;
+                    speakingAnimation.stop();
                 }
             });
 
-            // Mostra il modal
             const bootstrapModal = new bootstrap.Modal(modal);
             bootstrapModal.show();
         }
+
 
         // Definisci le traduzioni per ogni lingua
         const translations = {
             it: {
                 title: "MiraRoma",
                 content: `
-            Scopri Roma come mai prima d'ora! <strong>MiraRoma</strong> è una mappa interattiva che ti guiderà tra i tesori storici e artistici della Capitale.
+            <strong>MiraRoma</strong> come mai prima d'ora! Una mappa interattiva che ti guiderà tra i tesori storici e artistici della Capitale.
             Immagina di passeggiare tra le strade acciottolate, mentre un curatore virtuale ti racconta storie affascinanti su monumenti, statue, palazzi e fontane.
             Non solo avrai accesso a informazioni dettagliate su ogni punto di interesse, ma anche aneddoti divertenti e curiosità che renderanno ogni visita un’esperienza indimenticabile.
             Che tu sia un turista in cerca di avventure o un romano desideroso di riscoprire la propria città, <strong>MiraRoma</strong> ti accompagnerà nelle bellezze senza tempo di Roma.
@@ -631,9 +684,7 @@
 
                 if (currentPoi) {
                     // Aggiorna il contenuto del modal nella nuova lingua
-                    document.getElementById('poiModalLabel').textContent = currentPoi.name[currentLanguage] || currentPoi.name.it;
-                    document.getElementById('poiModalDescription').textContent =
-                        currentPoi.description[currentLanguage] || currentPoi.description.it;
+                    document.getElementById('poiModalLabel').textContent = currentPoi.name[lang] || currentPoi.name.it;
 
                     // Se c'è una riproduzione audio in corso, fermala
                     if (speechUtterance && isPlaying) {
