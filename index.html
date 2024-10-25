@@ -481,18 +481,17 @@
             }[category] || '';
         }
 
-        //creazione del modal con poi e aggiornamento della lingua della description
         function showModal(poi) {
             const modal = document.getElementById('poiModal');
             const modalTitle = document.getElementById('poiModalLabel');
             const modalBody = document.getElementById('poiModalDescription');
             const routeButton = document.getElementById('routeButton');
             let animationInterval;
-            let originalContent;
-            let isPaused = false; // Variabile per lo stato di pausa
+            let currentUtterance = null;
+            let isPlaying = false;
 
             // Resetta qualsiasi sintesi vocale in corso
-            if (speechUtterance) {
+            if (currentUtterance) {
                 speechSynthesis.cancel();
                 isPlaying = false;
                 clearInterval(animationInterval);
@@ -501,19 +500,13 @@
             // Funzione per creare l'animazione delle emoji
             function createSpeakingAnimation() {
                 const emojis = ['😀', '😮', '😐', '😯', '😑', '😯', '🙂', '😀', '🙂', '😮', '😐', '😀', '😮'];
-
                 let currentIndex = 0;
 
-                // Trova il footer del modal
                 const modalFooter = document.querySelector('#poiModal .modal-footer');
-
-                // Crea il contenitore delle emoji e aggiungilo al footer
                 const emojiContainer = document.createElement('p');
                 emojiContainer.style.fontSize = '38px';
-
-                // Allinea a destra usando Bootstrap
-                emojiContainer.style.display = 'inline-block'; // Imposta come inline-block per un corretto allineamento
-                emojiContainer.style.marginLeft = 'auto'; // Spazio automatico a sinistra per spostare a destra
+                emojiContainer.style.display = 'inline-block';
+                emojiContainer.style.marginLeft = 'auto';
                 modalFooter.appendChild(emojiContainer);
 
                 return {
@@ -521,7 +514,7 @@
                         if (!document.body.contains(emojiContainer)) {
                             modalFooter.appendChild(emojiContainer);
                         }
-                        emojiContainer.style.display = 'inline-block'; // Mostra le emoji
+                        emojiContainer.style.display = 'inline-block';
                         animationInterval = setInterval(() => {
                             emojiContainer.textContent = emojis[currentIndex];
                             currentIndex = (currentIndex + 1) % emojis.length;
@@ -529,11 +522,12 @@
                     },
                     stop: () => {
                         clearInterval(animationInterval);
-                        emojiContainer.style.display = 'none'; // Nasconde le emoji
+                        emojiContainer.style.display = 'none';
                     }
                 };
             }
 
+            // Configura il contenuto del modal
             modalTitle.textContent = poi.name[currentLanguage] || poi.name.it;
             modalBody.innerHTML = '';
 
@@ -564,75 +558,70 @@
 
             // Configura il pulsante audio
             const audioBtn = document.querySelector('#poiModal .modal-footer .btn-outline-secondary');
-
             audioBtn.innerHTML = '<i class="fas fa-play"></i>';
+
+            function createNewUtterance() {
+                const utterance = new SpeechSynthesisUtterance(poi.description[currentLanguage] || poi.description.it);
+                const langMap = {
+                    'it': 'it-IT',
+                    'en': 'en-GB',
+                    'fr': 'fr-FR',
+                    'es': 'es-ES',
+                    'lat': 'it'
+                };
+                utterance.lang = langMap[currentLanguage];
+
+                utterance.onend = function() {
+                    audioBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    isPlaying = false;
+                    speakingAnimation.stop();
+                    currentUtterance = null;
+                };
+
+                return utterance;
+            }
 
             // Gestione del pulsante audio
             audioBtn.onclick = function() {
-                if (!isPlaying) {
-                    if (!isPaused) {
-                        // Crea una nuova utterance solo se non è in pausa
-                        speechUtterance = new SpeechSynthesisUtterance(poi.description[currentLanguage] || poi.description.it);
-
-                        const langMap = {
-                            'it': 'it-IT',
-                            'en': 'en-GB',
-                            'fr': 'fr-FR',
-                            'es': 'es-ES',
-                            'lat': 'it'
-                        };
-
-                        speechUtterance.lang = langMap[currentLanguage];
-
-                        speechUtterance.onend = function() {
-                            audioBtn.innerHTML = '<i class="fas fa-play"></i>';
-                            isPlaying = false;
-                            isPaused = false;
-                            speakingAnimation.stop();
-                        };
-
-                        speakingAnimation.start();
-                        speechSynthesis.speak(speechUtterance);
-                        audioBtn.innerHTML = '<i class="fas fa-stop"></i>';
-                        isPlaying = true;
-                        isPaused = false;
-                    } else {
-                        // Riprendi se è in pausa
-                        speechSynthesis.resume();
-                        speakingAnimation.start(); // Riavvia l'animazione delle emoji
-                        audioBtn.innerHTML = '<i class="fas fa-stop"></i>';
-                        isPlaying = true;
-                        isPaused = false;
-                    }
-                } else {
-                    // Metti in pausa se è in riproduzione
-                    speechSynthesis.pause();
-                    speakingAnimation.stop(); // Ferma l'animazione delle emoji
+                if (isPlaying) {
+                    // Se sta riproducendo, ferma tutto
+                    speechSynthesis.cancel();
+                    speakingAnimation.stop();
                     audioBtn.innerHTML = '<i class="fas fa-play"></i>';
                     isPlaying = false;
-                    isPaused = true;
+                    currentUtterance = null;
+                } else {
+                    // Se non sta riproducendo, inizia una nuova utterance
+                    if (currentUtterance) {
+                        speechSynthesis.cancel();
+                    }
+                    currentUtterance = createNewUtterance();
+                    speechSynthesis.speak(currentUtterance);
+                    speakingAnimation.start();
+                    audioBtn.innerHTML = '<i class="fas fa-stop"></i>';
+                    isPlaying = true;
                 }
             };
 
             routeButton.onclick = function() {
                 openGoogleMaps(poi.lat, poi.lng);
             };
-            routeButton.style.padding = '10px 20px'; // Aumenta dimensione del contenitore del pulsante
+            routeButton.style.padding = '10px 20px';
 
+            // Gestione chiusura modal
             modal.addEventListener('hidden.bs.modal', function() {
-                if (speechUtterance) {
+                if (currentUtterance) {
                     speechSynthesis.cancel();
                     audioBtn.innerHTML = '<i class="fas fa-play"></i>';
                     isPlaying = false;
-                    isPaused = false;
                     speakingAnimation.stop();
+                    currentUtterance = null;
                 }
             });
 
             const bootstrapModal = new bootstrap.Modal(modal);
             bootstrapModal.show();
         }
-
 
         // Definisci le traduzioni per ogni lingua
         const translations = {
