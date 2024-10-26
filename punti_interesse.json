@@ -114,5 +114,70 @@
         "description_fr": "Le Temple d’Esculape, situé dans le magnifique Jardin du Lac de la Villa Borghese, est l'un des sites les plus évocateurs de Rome. Construit en 1786 dans un style néoclassique, ce petit temple dédié au dieu de la médecine fut commandé par le prince Marcantonio Borghese, témoignant de l’intérêt du XVIIIe siècle pour la redécouverte de l'antiquité classique. Inspiré de l'architecture grecque, le temple présente des colonnes ioniques, des frontons décorés et des statues faisant référence à l'iconographie médicale d'Esculape. Ce temple était aussi un lieu symbolique de guérison, et le petit lac artificiel qui l'entoure reflète cette fonction, car l'eau était un élément sacré lié au pouvoir thérapeutique. C'est un monument qui fusionne harmonieusement culture, nature et spiritualité.",
         "description_es": "El Templo de Esculapio, situado en el encantador Jardín del Lago en Villa Borghese, es uno de los lugares más evocadores de Roma. Construido en 1786 en estilo neoclásico, este pequeño templo dedicado al dios de la medicina fue encargado por el príncipe Marcantonio Borghese, representando el interés del siglo XVIII por el redescubrimiento de la antigüedad clásica. La estructura está inspirada en la arquitectura griega, con columnas jónicas, frontones decorados y estatuas que hacen referencia a la iconografía médica de Esculapio. El templo también servía como un lugar simbólico de curación, y el pequeño lago artificial que lo rodea refleja esta función, ya que el agua era un elemento sagrado vinculado al poder terapéutico. No es solo una atracción estética, sino también un monumento que representa la fusión de la cultura, la naturaleza y la espiritualidad.",
         "description_lat": "Templum Aesculapii, in amoeno Horti Lacus Villae Borghesiae situm, est unum e locis Romanae urbis maxime evocantibus. Anno MDCCLXXXVI aedificatum est, in stilo neoclassico, a principe Marco Antonio Borghesio imperatum, qui saeculi duodevicensimi studium antiquitatis classicae recuperandae significat. Structura architecturae Graecae inspirata est, cum columnis Ionicis, fastigiis ornatis, et statuis quae ad iconographiam medicam Aesculapii pertinent. Templum etiam locus symbolicus curationis fuit, et lacus parvus artificialis qui eum circumdat hanc functionem refert, nam aqua sacrum elementum cum virtute salutari coniunctum erat. Non solum est locus visu iucundus, sed etiam monumentum quod culturam, naturam, spiritualitatemque coniungit."
+    },
+    {
+        "name": "Tempio di Ercole Vincitore",
+        "category": "monumenti",
+        "img": "https://res.cloudinary.com/dr1rlvi5c/image/upload/v1729944842/Tempio_Ercole_Vincitore_nsxtoc.jpg",
+        "imgsrc": " ",
+        "lat": "41.888724",
+        "lon": "12.480769",
+        "description_it": "Il Tempio di Ercole Vincitore, situato nell'antico Foro Boario di Roma, è uno degli edifici meglio conservati del periodo repubblicano. Costruito nel II secolo a.C., è un esempio unico di tempio circolare, con colonne corinzie che circondano la cella centrale in marmo pentelico, un materiale pregiato proveniente dalla Grecia. La forma circolare e l’uso del marmo greco riflettono l’influenza ellenistica nella Roma repubblicana, un periodo in cui le conquiste militari facilitavano l’importazione di arte e cultura greca. Tradizionalmente attribuito a Ercole, dio della forza e del commercio, il tempio simboleggia il legame tra Roma e il Mediterraneo. Le colonne scanalate e le decorazioni della cornice rappresentano il culmine della maestria artistica romana, segno della sua funzione votiva. Inoltre, il Tempio di Ercole Vincitore è sopravvissuto a secoli di storia grazie al suo riutilizzo come chiesa cristiana, Santa Maria del Sole, dal medioevo. Il complesso equilibrio tra forma circolare e colonne rettilinee, nonché l'armonia delle proporzioni, mostrano l’abilità degli architetti romani nell'adattare e innovare modelli architettonici greci.",
+        "description_en": "The Temple of Hercules Victor, located in Rome’s ancient Forum Boarium, is one of the best-preserved structures from the Republican period. Built in the 2nd century BCE, it is a unique example of a circular temple, surrounded by Corinthian columns encircling a central cella made of Pentelic marble, a prized material sourced from Greece. The circular form and Greek marble indicate Hellenistic influence in Republican Rome, a time when military conquests facilitated the import of Greek art and culture. Traditionally dedicated to Hercules, the god of strength and commerce, the temple symbolizes Rome's connection to the Mediterranean. The fluted columns and the intricate frieze showcase the pinnacle of Roman artistic skill, underlining its votive purpose. Additionally, the Temple of Hercules Victor survived through centuries due to its medieval conversion into a Christian church, Santa Maria del Sole. The harmonious balance between circular form and straight columns, as well as its architectural proportions, reveal the Roman architects’ skill in adapting and innovating Greek architectural models.",
+        "description_fr": "",
+        "description_es": "El Templo de Hércules Victorioso, ubicado en el antiguo Foro Boario de Roma, es una de las estructuras mejor conservadas del periodo republicano. Construido en el siglo II a.C., es un ejemplo único de templo circular, rodeado por columnas corintias que envuelven una cella central de mármol pentélico, un material preciado traído de Grecia. La forma circular y el uso de mármol griego reflejan la influencia helenística en la Roma republicana, un periodo en el que las conquistas militares facilitaban la importación de arte y cultura griega. Tradicionalmente dedicado a Hércules, dios de la fuerza y el comercio, el templo simboliza la conexión de Roma con el Mediterráneo. Las columnas estriadas y la decoración de la cornisa representan el punto culminante de la maestría artística romana, indicando su función votiva. Además, el Templo de Hércules Victorioso ha sobrevivido a través de los siglos gracias a su reconversión en iglesia cristiana, Santa Maria del Sole, en la Edad Media. El equilibrio armonioso entre la forma circular y las columnas rectas, así como las proporciones arquitectónicas, revelan la habilidad de los arquitectos romanos para adaptar e innovar modelos arquitectónicos griegos.",
+        "description_lat": ""
+    },
+    {
+        "name": "",
+        "category": "",
+        "img": "",
+        "imgsrc": "",
+        "lat": "",
+        "lon": "",
+        "description_it": "",
+        "description_en": "",
+        "description_fr": "",
+        "description_es": "",
+        "description_lat": ""
+    },
+    {
+        "name": "",
+        "category": "",
+        "img": "",
+        "imgsrc": "",
+        "lat": "",
+        "lon": "",
+        "description_it": "",
+        "description_en": "",
+        "description_fr": "",
+        "description_es": "",
+        "description_lat": ""
+    },
+    {
+        "name": "",
+        "category": "",
+        "img": "",
+        "imgsrc": "",
+        "lat": "",
+        "lon": "",
+        "description_it": "",
+        "description_en": "",
+        "description_fr": "",
+        "description_es": "",
+        "description_lat": ""
+    },
+    {
+        "name": "",
+        "category": "",
+        "img": "",
+        "imgsrc": "",
+        "lat": "",
+        "lon": "",
+        "description_it": "",
+        "description_en": "",
+        "description_fr": "",
+        "description_es": "",
+        "description_lat": ""
     }
 ]
