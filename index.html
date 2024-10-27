@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/css/ol.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <style>
         html,
         body {
@@ -133,14 +134,16 @@
 
 <body>
     <div id="header" class="position-fixed top-0 w-100 bg-light p-2 d-flex justify-content-between align-items-center">
-        <div class="dropdown">
-            <button class="btn btn-outline-dark dropdown-toggle fw-bold fs-4 mt-3 no-arrow" type="button" data-bs-toggle="dropdown">
+        <div class="dropdown navbar-brand">
+            <button class="btn btn-dark dropdown-toggle fw-bold fs-4 mt-3 no-arrow" type="button" data-bs-toggle="dropdown">
                 <span id="headerTitle">Mira Roma</span>
             </button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#progettoModal">Progetto</a></li>
                 <li><a class="dropdown-item" href="https://www.paypal.com/donate/?hosted_button_id=L5R8GJK2L85VC" target="_blank">Sostienici ❤️</a></li>
                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy</a></li>
+                <li><a class="dropdown-item" id="addNewPOI">Segnala un nuovo punto d'interesse</a></li>
+
             </ul>
         </div>
         <div class="dropdown">
@@ -156,6 +159,34 @@
             </ul>
         </div>
     </div>
+
+    <!-- nuovo poi-->
+    <div class="modal fade" id="newPOIForm" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Segnala un nuovo punto d'interesse</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="poiSubmissionForm">
+                        <div class="mb-3">
+                            <label for="poiName" class="form-label">Nome del punto d'interesse</label>
+                            <input type="text" class="form-control" id="poiName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="poiDescription" class="form-label">Descrizione</label>
+                            <textarea class="form-control" id="poiDescription" rows="3" required></textarea>
+                        </div>
+                        <input type="hidden" id="poiLat">
+                        <input type="hidden" id="poiLng">
+                        <button type="submit" class="btn btn-primary">Invia segnalazione</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div id="content-wrapper">
         <div id="map-container">
@@ -277,8 +308,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/build/ol.js"></script>
-
+    <!-- <script src="js/config.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/location.js"></script>
+    <script src="js/poi.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/language.js"></script>
+    <script src="js/app.js"></script> -->
     <script>
+        ////
+
+        ////quando seleziono una nuova lingua, il menu dropdwon dece chiudersi, inoltre dopo che ho inviato il nuoov pjnto di interesse rimane impossibile clioccare, deve resettarsi il vecchio status
+
+        ////
         // Coordinate di Roma
         let rome = ol.proj.fromLonLat([12.474601, 41.897344]);
         // Creazione della mappa
@@ -288,6 +331,7 @@
                 new ol.layer.Tile({
                     source: new ol.source.OSM({
                         url: 'https://cartodb-basemaps-{a-d}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png'
+                            // url: 'https://cartodb-basemaps-{a-c}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png'
                     })
                 })
             ],
@@ -309,10 +353,228 @@
         let currentLang = 'it';
         let currentLanguage = 'it';
         let loadedPOIs = new Set(); // Per tenere traccia dei POI già caricati
+
         //nn serve
         // function changeLanguage(lang) {
         //     currentLanguage = lang;
         // }
+
+        //add new poi
+        let isSelectingLocation = false;
+        let vectorLayers = [];
+        let tempMarker = null;
+        const newPOIFormModal = new bootstrap.Modal(document.getElementById('newPOIForm'));
+        const navbarBrand = document.querySelector('.navbar-brand');
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        const originalDropdownHTML = dropdownToggle.innerHTML;
+        let isSubmitting = false;
+
+        // Gestore per il pulsante "Segnala un nuovo punto d'interesse"
+        document.getElementById('addNewPOI').addEventListener('click', function() {
+            // Chiudi il dropdown menu
+            const dropdownMenu = this.closest('.dropdown-menu');
+            const dropdownToggle = document.querySelector('.navbar-brand .dropdown-toggle');
+            const bsDropdown = bootstrap.Dropdown.getInstance(dropdownToggle);
+            if (bsDropdown) {
+                bsDropdown.hide();
+            }
+            isSelectingLocation = true;
+            dropdownToggle.innerHTML = `<strong>${translations[currentLanguage].whereQuestion}</strong>`;
+            dropdownToggle.classList.remove('btn-dark');
+            dropdownToggle.classList.add('btn-danger');
+
+            // Nascondi temporaneamente SOLO i layer dei POI, non il marker utente
+            map.getLayers().getArray()
+                .filter(layer => {
+                    // Verifica se il layer è un Vector layer ma NON è il marker utente
+                    return layer instanceof ol.layer.Vector && layer !== userPositionMarker;
+                })
+                .forEach(layer => {
+                    vectorLayers.push(layer);
+                    map.removeLayer(layer);
+                });
+
+            // Disabilita i controlli UI ma mantieni visibile il marker utente
+            toggleUIElements(true);
+        });
+
+
+        // Gestore click sulla mappa
+        map.on('click', function(evt) {
+            if (!isSelectingLocation) return;
+
+            const coords = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
+            const lat = coords[1];
+            const lng = coords[0];
+
+            // Aggiungi marker temporaneo
+            if (tempMarker) {
+                map.removeLayer(tempMarker);
+            }
+
+            const tempFeature = new ol.Feature({
+                geometry: new ol.geom.Point(evt.coordinate)
+            });
+
+            const tempStyle = new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 8,
+                    fill: new ol.style.Fill({
+                        color: 'red'
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: 'white',
+                        width: 2
+                    })
+                })
+            });
+
+            tempMarker = new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: [tempFeature]
+                }),
+                style: tempStyle
+            });
+
+            map.addLayer(tempMarker);
+
+            // Popola i campi nascosti con le coordinate
+            document.getElementById('poiLat').value = lat;
+            document.getElementById('poiLng').value = lng;
+
+            // Mostra il form
+            newPOIFormModal.show();
+        });
+
+        // Gestione chiusura form
+        document.getElementById('newPOIForm').addEventListener('hidden.bs.modal', function() {
+            // Rimuovi il marker temporaneo
+            if (tempMarker) {
+                map.removeLayer(tempMarker);
+                tempMarker = null;
+            }
+
+            // Ripristina i layer dei marker originali solo se non stiamo inviando il form
+            if (!isSubmitting) {
+                // Ripristina i layer originali
+                vectorLayers.forEach(layer => map.addLayer(layer));
+                vectorLayers = [];
+
+                // Reset completo dello stato e dell'interfaccia
+                resetUICompletely();
+            }
+
+            // Reset del form
+            document.getElementById('poiSubmissionForm').reset();
+        });
+
+
+        // Gestione invio form
+        document.getElementById('poiSubmissionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (isSubmitting) return; // Previene invii multipli
+            isSubmitting = true;
+            isSelectingLocation = false; // Disabilita immediatamente la selezione sulla mappa
+
+            const formData = {
+                name: document.getElementById('poiName').value,
+                description: document.getElementById('poiDescription').value,
+                lat: document.getElementById('poiLat').value,
+                lng: document.getElementById('poiLng').value,
+                timestamp: new Date().toISOString()
+            };
+
+            // Rimuovi immediatamente il marker temporaneo
+            if (tempMarker) {
+                map.removeLayer(tempMarker);
+                tempMarker = null;
+            }
+
+            // Ripristina immediatamente i layer dei marker originali
+            vectorLayers.forEach(layer => map.addLayer(layer));
+            vectorLayers = [];
+
+            // Ripristina immediatamente il dropdown originale
+            dropdownToggle.innerHTML = originalDropdownHTML;
+            dropdownToggle.classList.remove('btn-danger');
+            dropdownToggle.classList.add('btn-dark');
+
+            // Chiudi il modal
+            newPOIFormModal.hide();
+
+            // Invia i dati al Google Sheet
+            submitToGoogleSheet(formData);
+        });
+
+        function submitToGoogleSheet(data) {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzj77FWD85OXnT_35LU5_-uhXd3uPt9YC-SrgDZDHWSR3ATtuB65nYd3PVO6Guu2YMGAg/exec';
+
+            const successMessage = document.createElement('div');
+            successMessage.className = 'position-fixed top-50 start-50 translate-middle bg-dark text-white p-3 rounded';
+            successMessage.style.zIndex = '1000';
+            successMessage.innerHTML = `<strong>${translations[currentLanguage].thankYouMessage}</strong>`;
+
+            fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(() => {
+                    // Mostra il messaggio di successo
+                    document.body.appendChild(successMessage);
+                    setTimeout(() => {
+                        successMessage.remove();
+                    }, 3000);
+
+                    // Reset completo dello stato
+                    document.getElementById('poiSubmissionForm').reset();
+
+                    // Rimuovi il marker temporaneo
+                    if (tempMarker) {
+                        map.removeLayer(tempMarker);
+                        tempMarker = null;
+                    }
+
+                    // Ripristina i layer originali
+                    vectorLayers.forEach(layer => map.addLayer(layer));
+                    vectorLayers = [];
+
+                    // Reset completo dell'interfaccia
+                    resetUICompletely();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Si è verificato un errore durante l\'invio della segnalazione');
+                    resetUICompletely();
+                })
+                .finally(() => {
+                    isSubmitting = false;
+                });
+        }
+
+        function resetPOISelection() {
+            isSelectingLocation = false;
+            if (tempMarker) {
+                map.removeLayer(tempMarker);
+                tempMarker = null;
+            }
+
+            // Ripristina i layer dei marker originali
+            vectorLayers.forEach(layer => map.addLayer(layer));
+            vectorLayers = [];
+
+            // Reset form
+            document.getElementById('poiSubmissionForm').reset();
+
+            // Ripristina il dropdown originale
+            dropdownToggle.innerHTML = originalDropdownHTML;
+            dropdownToggle.classList.remove('btn-danger');
+            dropdownToggle.classList.add('btn-dark');
+        }
 
         // Funzione per richiedere la geolocalizzazione
         function requestGeolocation() {
@@ -482,9 +744,10 @@
                 monumenti: '🏛️',
                 chiese: '🕊️',
                 edifici: '🏢',
-                varie: '❗',
+                varie: '👁️',
                 fontane: '⛲',
                 statue: '🗿',
+                murales: '🎨',
             }[category] || '';
         }
 
@@ -647,25 +910,68 @@ Immagina di passeggiare tra le strade acciottolate, mentre un curatore virtuale 
 Non solo avrai accesso a informazioni dettagliate su ogni punto di interesse, ma anche aneddoti divertenti e curiosità che renderanno ogni visita un'esperienza indimenticabile.
 Che tu sia un turista in cerca di avventure o un romano desideroso di riscoprire la propria città, <strong>MiraRoma</strong> ti accompagnerà nelle bellezze senza tempo di Roma.
 Creata e mantenuta <strong>Gratis</strong> con passione, per permettere a tutti di riscoprire quelle meraviglie che, nella frenesia quotidiana, troppo spesso diamo per scontate.
-`
+`,
+                // Dropdown menu items
+                dropdownItems: {
+                    project: "Progetto",
+                    support: "Sostienici ❤️",
+                    privacy: "Privacy",
+                    reportPoi: "Segnala un nuovo punto d'interesse"
+                },
+                whereQuestion: "Dove?",
+                thankYouMessage: "Grazie per il contributo!",
+                footerSupport: "Sostieni l'app con una donazione",
+                newPoiTitle: "Segnala un nuovo punto d'interesse",
+                poiNameLabel: "Nome del punto d'interesse",
+                descriptionLabel: "Descrizione",
+                submitButton: "Invia segnalazione",
+                submitError: "Si è verificato un errore durante l'invio della segnalazione"
             },
             en: {
                 title: "MiraRoma",
-                content: `
-           Experience <strong>MiraRoma</strong> like never before! An interactive map that guides you through the Capital's historical and artistic treasures.
+                content: `Experience <strong>MiraRoma</strong> like never before! An interactive map that guides you through the Capital's historical and artistic treasures.
 Imagine strolling through cobblestone streets while a virtual curator tells you fascinating stories about monuments, statues, palaces, and fountains.
 Not only will you have access to detailed information about each point of interest, but also fun anecdotes and curiosities that will make every visit an unforgettable experience.
 Whether you're a tourist seeking adventure or a Roman eager to rediscover your city, <strong>MiraRoma</strong> will accompany you through Rome's timeless beauty.
-Created and maintained <strong>Gratis</strong> with passion, to allow everyone to rediscover those wonders that, in the rush of daily life, we too often take for granted.`
+Created and maintained <strong>Gratis</strong> with passion, to allow everyone to rediscover those wonders that, in the rush of daily life, we too often take for granted.`,
+                // Dropdown menu items
+                dropdownItems: {
+                    project: "Project",
+                    support: "Support us ❤️",
+                    privacy: "Privacy",
+                    reportPoi: "Report new point of interest"
+                },
+                whereQuestion: "Where?",
+                thankYouMessage: "Thank you for your contribution!",
+                footerSupport: "Support the app with a donation",
+                newPoiTitle: "Report a new point of interest",
+                poiNameLabel: "Point of interest name",
+                descriptionLabel: "Description",
+                submitButton: "Submit report",
+                submitError: "An error occurred while submitting the report"
             },
             fr: {
                 title: "MiraRoma",
-                content: `
-        Découvrez <strong>MiraRoma</strong> comme jamais auparavant ! Une carte interactive qui vous guidera à travers les trésors historiques et artistiques de la Capitale.
+                content: `Découvrez <strong>MiraRoma</strong> comme jamais auparavant ! Une carte interactive qui vous guidera à travers les trésors historiques et artistiques de la Capitale.
 Imaginez-vous flâner dans les rues pavées pendant qu'un conservateur virtuel vous raconte des histoires fascinantes sur les monuments, les statues, les palais et les fontaines.
 Non seulement vous aurez accès à des informations détaillées sur chaque point d'intérêt, mais aussi à des anecdotes amusantes et des curiosités qui rendront chaque visite inoubliable.
 Que vous soyez un touriste en quête d'aventures ou un Romain désireux de redécouvrir votre ville, <strong>MiraRoma</strong> vous accompagnera à travers les beautés intemporelles de Rome.
-Créée et maintenue <strong>Gratis</strong> avec passion, pour permettre à tous de redécouvrir ces merveilles que, dans la frénésie du quotidien, nous prenons trop souvent pour acquises.`
+Créée et maintenue <strong>Gratis</strong> avec passion, pour permettre à tous de redécouvrir ces merveilles que, dans la frénésie du quotidien, nous prenons trop souvent pour acquises.`,
+                // Dropdown menu items
+                dropdownItems: {
+                    project: "Projet",
+                    support: "Soutenez-nous ❤️",
+                    privacy: "Confidentialité",
+                    reportPoi: "Signaler un nouveau point d'intérêt"
+                },
+                whereQuestion: "Où?",
+                thankYouMessage: "Merci pour votre contribution!",
+                footerSupport: "Soutenez l'application avec un don",
+                newPoiTitle: "Signaler un nouveau point d'intérêt",
+                poiNameLabel: "Nom du point d'intérêt",
+                descriptionLabel: "Description",
+                submitButton: "Envoyer le rapport",
+                submitError: "Une erreur s'est produite lors de l'envoi du rapport"
             },
             es: {
                 title: "MiraRoma",
@@ -673,32 +979,134 @@ Créée et maintenue <strong>Gratis</strong> avec passion, pour permettre à tou
 Imagina pasear por calles empedradas mientras un curador virtual te cuenta historias fascinantes sobre monumentos, estatuas, palacios y fuentes.
 No solo tendrás acceso a información detallada sobre cada punto de interés, sino también a anécdotas divertidas y curiosidades que harán de cada visita una experiencia inolvidable.
 Ya seas un turista en busca de aventuras o un romano deseoso de redescubrir tu ciudad, <strong>MiraRoma</strong> te acompañará por las bellezas atemporales de Roma.
-Creada y mantenida <strong>Gratis</strong> con pasión, para permitir que todos redescubran esas maravillas que, en el ajetreo diario, damos por sentado con demasiada frecuencia.`
+Creada y mantenida <strong>Gratis</strong> con pasión, para permitir que todos redescubran esas maravillas que, en el ajetreo diario, damos por sentado con demasiada frecuencia.`,
+                // Dropdown menu items
+                dropdownItems: {
+                    project: "Proyecto",
+                    support: "Apóyanos ❤️",
+                    privacy: "Privacidad",
+                    reportPoi: "Informar nuevo punto de interés"
+                },
+                whereQuestion: "¿Dónde?",
+                thankYouMessage: "¡Gracias por tu contribución!",
+                footerSupport: "Apoya la aplicación con una donación",
+                newPoiTitle: "Informar de un nuevo punto de interés",
+                poiNameLabel: "Nombre del punto de interés",
+                descriptionLabel: "Descripción",
+                submitButton: "Enviar informe",
+                submitError: "Se produjo un error al enviar el informe"
             }
         };
 
         // Funzione per cambiare la lingua
-        function changeLanguage(lang) {
-            currentLanguage = lang; // Aggiorna la lingua corrente
+        // Gestione dello stato dell'interfaccia durante la selezione del POI
 
-            // Aggiorna il modal del progetto
+
+        // Funzione per disabilitare/abilitare elementi dell'interfaccia
+        function toggleUIElements(disable) {
+            const mainDropdown = document.querySelector('.navbar-brand .dropdown-toggle');
+            const langDropdown = document.getElementById('languageSelector');
+            const footerLinks = document.querySelectorAll('#sticky-footer a');
+            const dropdownItems = document.querySelectorAll('.navbar-brand .dropdown-menu .dropdown-item');
+
+            [mainDropdown, langDropdown, ...dropdownItems].forEach(element => {
+                if (disable) {
+                    element.setAttribute('disabled', 'disabled');
+                    element.style.pointerEvents = 'none';
+                    element.style.opacity = '0.6';
+                } else {
+                    element.removeAttribute('disabled');
+                    element.style.pointerEvents = 'auto';
+                    element.style.opacity = '1';
+                }
+            });
+
+            footerLinks.forEach(link => {
+                link.style.pointerEvents = disable ? 'none' : 'auto';
+                link.style.opacity = disable ? '0.6' : '1';
+            });
+        }
+
+        // Funzione principale per il cambio lingua
+
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
             const projectTranslation = translations[lang];
-            if (projectTranslation) {
-                document.querySelector('#progettoModal .modal-title').innerHTML = projectTranslation.title;
-                document.getElementById('progettoContent').innerHTML = projectTranslation.content;
+
+            if (!projectTranslation) return;
+
+            // Salva i layer correnti prima del cambio lingua se in modalità selezione
+            if (isSelectingLocation) {
+                map.getLayers().getArray()
+                    .filter(layer => {
+                        return layer instanceof ol.layer.Vector && layer !== userPositionMarker;
+                    })
+                    .forEach(layer => {
+                        if (!vectorLayers.includes(layer)) {
+                            vectorLayers.push(layer);
+                            map.removeLayer(layer);
+                        }
+                    });
             }
 
-            // Se c'è un modal aperto per i POI, aggiorna il contenuto
+            // Aggiorna l'interfaccia...
+            updateMainInterface(projectTranslation);
+            updatePOIForm(projectTranslation);
+            updateFooter(projectTranslation);
+            updateOpenPOIModal(lang);
+
+            // Aggiorna il testo "Where?" se in modalità selezione
+            if (isSelectingLocation) {
+                const dropdownToggle = document.querySelector('.navbar-brand .dropdown-toggle');
+                dropdownToggle.innerHTML = `<strong>${projectTranslation.whereQuestion}</strong>`;
+            }
+        }
+
+        // Funzione per aggiornare l'interfaccia principale
+        function updateMainInterface(translation) {
+            document.querySelector('#progettoModal .modal-title').innerHTML = translation.title;
+            document.getElementById('progettoContent').innerHTML = translation.content;
+
+            // Aggiorna i testi del dropdown principale usando la struttura esistente
+            const dropdownItems = document.querySelectorAll('.navbar-brand .dropdown-menu .dropdown-item');
+            const menuKeys = ['project', 'support', 'privacy', 'reportPoi'];
+
+            dropdownItems.forEach((item, index) => {
+                if (menuKeys[index] && translation.dropdownItems[menuKeys[index]]) {
+                    item.textContent = translation.dropdownItems[menuKeys[index]];
+                }
+            });
+
+            // Mantieni il titolo header se non in modalità selezione
+            if (!isSelectingLocation) {
+                document.getElementById('headerTitle').textContent = translation.title;
+            }
+        }
+
+        // Funzione per aggiornare il form POI
+        function updatePOIForm(translation) {
+            document.querySelector('#newPOIForm .modal-title').textContent = translation.newPoiTitle;
+            document.querySelector('label[for="poiName"]').textContent = translation.poiNameLabel;
+            document.querySelector('label[for="poiDescription"]').textContent = translation.descriptionLabel;
+            document.querySelector('#poiSubmissionForm button[type="submit"]').textContent = translation.submitButton;
+        }
+
+        // Funzione per aggiornare il footer
+        function updateFooter(translation) {
+            const footerLinks = document.querySelectorAll('#sticky-footer a');
+            footerLinks[0].textContent = translation.footerSupport;
+        }
+
+        // Funzione per aggiornare il modal POI aperto
+        function updateOpenPOIModal(lang) {
             const poiModal = document.getElementById('poiModal');
             if (poiModal.classList.contains('show')) {
                 const currentPoiTitle = document.getElementById('poiModalLabel').textContent;
-                const currentPoi = findPoiByTitle(currentPoiTitle); // Dovrai implementare questa funzione
+                const currentPoi = findPoiByTitle(currentPoiTitle);
 
                 if (currentPoi) {
-                    // Aggiorna il contenuto del modal nella nuova lingua
                     document.getElementById('poiModalLabel').textContent = currentPoi.name[lang] || currentPoi.name.it;
-
-                    // Se c'è una riproduzione audio in corso, fermala
                     if (speechUtterance && isPlaying) {
                         speechSynthesis.cancel();
                         document.querySelector('#poiModal .modal-footer .btn-outline-secondary').innerHTML =
@@ -709,24 +1117,115 @@ Creada y mantenida <strong>Gratis</strong> con pasión, para permitir que todos 
             }
         }
 
-        // Gestione del selettore lingua nel menu
+        // Gestione del selettore lingua
         document.querySelectorAll('.dropdown-item[data-lang]').forEach(item => {
             item.addEventListener('click', function(event) {
-                const selectedLang = this.dataset.lang; // Lingua selezionata (it, en, fr, ecc.)
-                const selectedText = this.textContent; // Testo del pulsante selezionato (Italiano, English, Français, ecc.)
+                if (isSelectingLocation) return; // Impedisce il cambio lingua durante la selezione del POI
+
+                const selectedLang = this.dataset.lang;
+                const selectedText = this.textContent;
 
                 if (selectedLang) {
-                    // Aggiorna il testo del selettore visibile
                     document.getElementById('languageSelectorText').textContent = selectedText;
-
-                    // Cambia la lingua e aggiorna il contenuto del modal
                     changeLanguage(selectedLang);
                 }
             });
         });
 
+        // Gestione della modalità selezione POI
+        document.getElementById('addNewPOI').addEventListener('click', function() {
+            // Chiudi il dropdown menu dopo il click
+            const dropdownMenu = this.closest('.dropdown-menu');
+            const dropdownToggle = document.querySelector('.navbar-brand .dropdown-toggle');
+            const bsDropdown = bootstrap.Dropdown.getInstance(dropdownToggle);
+            if (bsDropdown) {
+                bsDropdown.hide();
+            }
+
+            isSelectingLocation = true;
+            toggleUIElements(true);
+            dropdownToggle.innerHTML = `<strong>${translations[currentLanguage].whereQuestion}</strong>`;
+            dropdownToggle.classList.remove('btn-dark');
+            dropdownToggle.classList.add('btn-danger');
+        });
+
+        // Gestione della chiusura del form POI
+        document.getElementById('newPOIForm').addEventListener('hidden.bs.modal', function() {
+            if (!isSubmitting) {
+                isSelectingLocation = false;
+                toggleUIElements(false);
+                const dropdownToggle = document.querySelector('.navbar-brand .dropdown-toggle');
+                dropdownToggle.innerHTML = `<span id="headerTitle">${translations[currentLanguage].title}</span>`;
+                dropdownToggle.classList.remove('btn-danger');
+                dropdownToggle.classList.add('btn-dark');
+            }
+        });
+
+        // Reset della selezione POI
+        function resetPOISelection() {
+            isSelectingLocation = false;
+            toggleUIElements(false);
+            const dropdownToggle = document.querySelector('.navbar-brand .dropdown-toggle');
+            dropdownToggle.innerHTML = `<span id="headerTitle">${translations[currentLanguage].title}</span>`;
+            dropdownToggle.classList.remove('btn-danger');
+            dropdownToggle.classList.add('btn-dark');
+
+        }
+
+        // Nuova funzione per reset completo UI
+        function resetUICompletely() {
+            isSelectingLocation = false;
+
+            // Rimuovi solo il marker temporaneo se presente
+            if (tempMarker) {
+                map.removeLayer(tempMarker);
+                tempMarker = null;
+            }
+
+            // Ripristina i layer dei POI
+            vectorLayers.forEach(layer => {
+                // Verifica che il layer non sia già presente sulla mappa
+                if (!map.getLayers().getArray().includes(layer)) {
+                    map.addLayer(layer);
+                }
+            });
+            vectorLayers = [];
+
+            // Riabilita tutti gli elementi UI
+            toggleUIElements(false);
+
+            // Reset del dropdown principale
+            const dropdownToggle = document.querySelector('.navbar-brand .dropdown-toggle');
+            dropdownToggle.innerHTML = `<span id="headerTitle">${translations[currentLanguage].title}</span>`;
+            dropdownToggle.classList.remove('btn-danger');
+            dropdownToggle.classList.add('btn-dark');
+
+            // Riabilita i dropdown
+            const mainDropdown = document.querySelector('.navbar-brand .dropdown-toggle');
+            const langDropdown = document.getElementById('languageSelector');
+
+            if (mainDropdown) {
+                mainDropdown.removeAttribute('disabled');
+                mainDropdown.style.pointerEvents = 'auto';
+                mainDropdown.style.opacity = '1';
+            }
+
+            if (langDropdown) {
+                langDropdown.removeAttribute('disabled');
+                langDropdown.style.pointerEvents = 'auto';
+                langDropdown.style.opacity = '1';
+            }
+
+            // Riabilita tutti i dropdown items
+            document.querySelectorAll('.dropdown-item').forEach(item => {
+                item.removeAttribute('disabled');
+                item.style.pointerEvents = 'auto';
+                item.style.opacity = '1';
+            });
+        }
+
         // Imposta il contenuto iniziale in italiano
-        changeLanguage('it'); // Quando la pagina viene caricata, il contenuto sarà in italiano
+        changeLanguage('it');
 
 
         function openGoogleMaps(lat, lng) {
